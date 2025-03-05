@@ -14,7 +14,10 @@
         "dark": "./assets/icons/ios-dark.png",
         "light": "./assets/icons/ios-light.png"
       },
-      "bundleIdentifier": "com.gersonrocha9.KerygmaAI"
+      "bundleIdentifier": "com.gersonrocha9.KerygmaAI",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
