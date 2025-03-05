@@ -13,7 +13,8 @@
       "icon": {
         "dark": "./assets/icons/ios-dark.png",
         "light": "./assets/icons/ios-light.png"
-      }
+      },
+      "bundleIdentifier": "com.gersonrocha9.KerygmaAI"
     },
     "android": {
       "adaptiveIcon": {
