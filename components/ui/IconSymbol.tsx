@@ -3,7 +3,7 @@
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { SymbolWeight } from 'expo-symbols';
 import React from 'react';
-import { OpaqueColorValue, StyleProp, ViewStyle } from 'react-native';
+import { OpaqueColorValue, StyleProp, TextStyle, ViewStyle } from 'react-native';
 
 // Add your SFSymbol to MaterialIcons mappings here.
 const MAPPING = {
@@ -13,6 +13,23 @@ const MAPPING = {
   'paperplane.fill': 'send',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
+  'square.and.arrow.up': 'share',
+  'book.fill': 'book',
+  'plus.circle.fill': 'add-circle',
+  'clock.fill': 'access-time',
+  'lightbulb.fill': 'lightbulb',
+  'info.circle.fill': 'info',
+  'heart.fill': 'favorite',
+  'book.closed.fill': 'menu-book',
+  'quote.opening': 'format-quote',
+  'arrow.right': 'arrow-forward',
+  'arrow.left': 'arrow-back',
+  'trash.fill': 'delete',
+  'trash': 'delete-outline',
+  'xmark.circle.fill': 'cancel',
+  'sparkles': 'auto-awesome',
+  'wand.and.stars': 'auto-fix-high',
+  'wand.and.star': 'auto-fix-normal',
 } as Partial<
   Record<
     import('expo-symbols').SymbolViewProps['name'],
@@ -39,5 +56,8 @@ export function IconSymbol({
   style?: StyleProp<ViewStyle>;
   weight?: SymbolWeight;
 }) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+  // Get the mapped Material icon name or use a fallback
+  const iconName = MAPPING[name] || 'help-outline'; // Add a fallback icon if mapping is missing
+
+  return <MaterialIcons color={color} size={size} name={iconName} style={style as StyleProp<TextStyle>} />;
 }
