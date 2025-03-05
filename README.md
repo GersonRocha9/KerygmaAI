@@ -1,50 +1,97 @@
-# Welcome to your Expo app 👋
+# KerygmaAI
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Um aplicativo mobile que utiliza inteligência artificial para gerar devocionais personalizados com base nos temas escolhidos pelo usuário.
 
-## Get started
+## 📋 Significado do Nome
 
-1. Install dependencies
+**KerygmaAI** combina dois conceitos poderosos:
 
-   ```bash
-   npm install
-   ```
+- **Kerygma** (κήρυγμα): Palavra grega que significa "proclamação" ou "anúncio", frequentemente utilizada para se referir à proclamação do Evangelho no cristianismo. É o ato de anunciar a mensagem cristã de maneira clara e acessível.
 
-2. Start the app
+- **AI** (Artificial Intelligence): Representa a tecnologia de inteligência artificial que permite a geração de conteúdo personalizado.
 
-   ```bash
-    npx expo start
-   ```
+O nome simboliza a missão do aplicativo: utilizar tecnologia moderna (IA) para auxiliar na proclamação e reflexão sobre os ensinamentos cristãos, tornando-os mais acessíveis e personalizados para o dia a dia dos usuários.
 
-In the output, you'll find options to open the app in a
+## 📱 Screenshots
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+<div align="center">
+  <!-- Adicione suas screenshots aqui. Exemplo: -->
+  <!-- <img src="screenshots/tela-inicial.png" width="250" alt="Tela inicial" /> -->
+  <!-- <img src="screenshots/devocional.png" width="250" alt="Tela de devocional" /> -->
+  <!-- <img src="screenshots/historico.png" width="250" alt="Histórico de devocionais" /> -->
+  
+  [Adicione screenshots do seu aplicativo aqui]
+</div>
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 💡 Sobre o Projeto
 
-## Get a fresh project
+O KerygmaAI é um aplicativo desenvolvido para ajudar pessoas a terem momentos de reflexão espiritual personalizados. O usuário pode escolher um tema de interesse e o aplicativo gera automaticamente um devocional completo, incluindo:
 
-When you're ready, run:
+- Versículo bíblico relacionado
+- Introdução ao tema
+- Tópicos de estudo detalhados
+- Conclusão
+- Oração final
 
+Os devocionais gerados são salvos automaticamente no histórico do usuário para consulta posterior, podendo ser compartilhados com amigos e familiares.
+
+## 🚀 Tecnologias Utilizadas
+
+- **React Native** - Framework para desenvolvimento mobile
+- **Expo** - Plataforma para desenvolvimento React Native
+- **TypeScript** - Linguagem fortemente tipada baseada em JavaScript
+- **React Hook Form** - Gerenciamento de formulários
+- **Zod** - Validação de formulários
+- **OpenAI API** - Geração de conteúdo por IA
+- **Async Storage** - Armazenamento local de dados
+- **Expo Vector Icons** - Ícones consistentes entre plataformas
+- **React Navigation** - Navegação entre telas
+
+## ✨ Funcionalidades
+
+- Geração de devocionais personalizados com IA
+- Interface amigável e intuitiva
+- Histórico de devocionais consultados
+- Compartilhamento de devocionais via aplicativos de mensagem
+- Suporte para temas claro e escuro
+- Interface adaptada para iOS e Android
+
+## 🛠️ Instalação e Uso
+
+1. Clone o repositório:
 ```bash
-npm run reset-project
+git clone https://github.com/GersonRocha9/kerygma-ai.git
+cd kerygma-ai
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Instale as dependências:
+```bash
+npm install
+```
 
-## Learn more
+3. Crie um arquivo `.env` com as variáveis de ambiente necessárias:
+```
+EXPO_PUBLIC_OPENAI_API_KEY=sua_chave_api_aqui
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+4. Execute o projeto:
+```bash
+npx expo start
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📝 Notas Importantes
 
-## Join the community
+- O conteúdo gerado por IA serve como complemento à reflexão espiritual, não substitui a leitura direta da Bíblia ou orientação pastoral.
+- É necessária uma chave de API da OpenAI para o funcionamento completo do aplicativo.
 
-Join our community of developers creating universal apps.
+## 🤝 Contribuindo
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
+
+## 📄 Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para detalhes.
+
+---
+
+Desenvolvido com 💚 e ☕
