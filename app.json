@@ -20,7 +20,8 @@
         "foregroundImage": "./assets/icons/adaptive-icon.png",
         "monochromeImage": "./assets/icons/adaptive-icon.png",
         "backgroundColor": "#4CAF50"
-      }
+      },
+      "package": "com.gersonrocha9.KerygmaAI"
     },
     "web": {
       "bundler": "metro",
