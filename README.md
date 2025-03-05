@@ -16,11 +16,9 @@ O nome simboliza a missão do aplicativo: utilizar tecnologia moderna (IA) para 
 
 <div align="center">
   <!-- Adicione suas screenshots aqui. Exemplo: -->
-  <!-- <img src="screenshots/tela-inicial.png" width="250" alt="Tela inicial" /> -->
-  <!-- <img src="screenshots/devocional.png" width="250" alt="Tela de devocional" /> -->
-  <!-- <img src="screenshots/historico.png" width="250" alt="Histórico de devocionais" /> -->
-  
-  [Adicione screenshots do seu aplicativo aqui]
+  <img src="screenshots/tela-inicial.png" width="250" alt="Tela inicial" />
+  <img src="screenshots/devocional.png" width="250" alt="Tela de devocional" />
+  <img src="screenshots/historico.png" width="250" alt="Histórico de devocionais" />
 </div>
 
 ## 💡 Sobre o Projeto
@@ -45,7 +43,7 @@ Os devocionais gerados são salvos automaticamente no histórico do usuário par
 - **OpenAI API** - Geração de conteúdo por IA
 - **Async Storage** - Armazenamento local de dados
 - **Expo Vector Icons** - Ícones consistentes entre plataformas
-- **React Navigation** - Navegação entre telas
+- **Expo Router** - Navegação entre telas
 
 ## ✨ Funcionalidades
 
