@@ -43,4 +43,4 @@ export const inspirationalVerses = [
 export const getRandomVerse = () => {
   const randomIndex = Math.floor(Math.random() * inspirationalVerses.length);
   return inspirationalVerses[randomIndex];
-}; 
+};

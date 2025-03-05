@@ -1,6 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   ActivityIndicator,
   Platform,
@@ -15,15 +15,17 @@ import {
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useTranslatedVerseOfTheDay } from '@/hooks/queries/useVerseOfTheDay';
 import { DevotionalHistory, loadRecentDevotionals } from '@/services/devotionalService';
 import { shareVerse } from '@/services/shareService';
-import { getRandomVerse } from '@/utils/verseUtils';
 
 export default function HomeScreen() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [devotionalHistory, setDevotionalHistory] = useState<DevotionalHistory[]>([]);
-  const [featuredVerse, setFeaturedVerse] = useState(getRandomVerse());
+
+  // Utilize o hook personalizado para buscar o versículo do dia traduzido
+  const { data: translatedVerse, isLoading: verseLoading } = useTranslatedVerseOfTheDay();
 
   // Carregar histórico de devocionais
   const loadDevotionalHistory = async () => {
@@ -45,14 +47,6 @@ export default function HomeScreen() {
     }, [])
   );
 
-  useEffect(() => {
-    // Selecionar um versículo aleatório
-    setFeaturedVerse(getRandomVerse());
-
-    // Carregamento inicial dos devocionais
-    loadDevotionalHistory();
-  }, []);
-
   const navigateToDevotional = () => {
     router.push('/devotional');
   };
@@ -73,6 +67,44 @@ export default function HomeScreen() {
     });
   };
 
+  // Função para renderizar o versículo do dia
+  const renderVerse = () => {
+    if (verseLoading || !translatedVerse) {
+      return (
+        <ThemedView style={styles.verseCard}>
+          <View style={styles.verseHeader}>
+            <ThemedText style={styles.verseTitle}>Versículo do Dia</ThemedText>
+          </View>
+          <ActivityIndicator size="small" color="#4CAF50" style={{ marginVertical: 15 }} />
+        </ThemedView>
+      );
+    }
+
+    return (
+      <ThemedView style={styles.verseCard}>
+        <View style={styles.verseHeader}>
+          <ThemedText style={styles.verseTitle}>Versículo do Dia</ThemedText>
+          <TouchableOpacity
+            style={styles.shareButton}
+            onPress={() => {
+              if (translatedVerse) {
+                shareVerse(translatedVerse.text, translatedVerse.reference);
+              }
+            }}
+          >
+            <IconSymbol name="square.and.arrow.up" size={18} color="#4CAF50" />
+          </TouchableOpacity>
+        </View>
+        <ThemedText style={styles.verseText}>
+          {translatedVerse.text}
+        </ThemedText>
+        <ThemedText style={styles.verseReference}>
+          {translatedVerse.reference}
+        </ThemedText>
+      </ThemedView>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -87,20 +119,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Versículo em Destaque */}
-        <ThemedView style={styles.verseCard}>
-          <View style={styles.verseHeader}>
-            <ThemedText style={styles.verseTitle}>Versículo do Dia</ThemedText>
-            <TouchableOpacity style={styles.shareButton} onPress={() => shareVerse(featuredVerse.text, featuredVerse.reference)}>
-              <IconSymbol name="square.and.arrow.up" size={18} color="#4CAF50" />
-            </TouchableOpacity>
-          </View>
-          <ThemedText style={styles.verseText}>
-            "{featuredVerse.text}"
-          </ThemedText>
-          <ThemedText style={styles.verseReference}>
-            {featuredVerse.reference}
-          </ThemedText>
-        </ThemedView>
+        {renderVerse()}
 
         {/* Botão Novo Devocional */}
         <Pressable
@@ -243,27 +262,24 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 20,
-    paddingVertical: 12,
+    marginBottom: 16,
   },
   headerIcon: {
     marginRight: 8,
   },
   headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#212121',
+    fontSize: 22,
+    fontFamily: 'Inter-SemiBold',
   },
   verseCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
     elevation: 2,
-    marginBottom: 20,
   },
   verseHeader: {
     flexDirection: 'row',
@@ -272,44 +288,37 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   verseTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#4CAF50',
+    fontSize: 16,
+    fontFamily: 'Inter-SemiBold',
   },
   shareButton: {
-    width: 36,
-    height: 36,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 18,
-    backgroundColor: 'rgba(76, 175, 80, 0.1)',
+    padding: 4,
   },
   verseText: {
     fontSize: 16,
     lineHeight: 24,
-    color: '#424242',
-    fontStyle: 'italic',
     marginBottom: 12,
+    fontFamily: 'Inter-Regular',
+    fontStyle: 'italic',
   },
   verseReference: {
     fontSize: 14,
-    color: '#757575',
+    fontFamily: 'Inter-Medium',
     textAlign: 'right',
-    fontWeight: '500',
   },
   devotionalButton: {
     backgroundColor: '#4CAF50',
     borderRadius: 12,
+    padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
     marginBottom: 24,
-    shadowColor: '#4CAF50',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
   },
   buttonIcon: {
     marginRight: 8,
@@ -317,37 +326,36 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontFamily: 'Inter-SemiBold',
   },
   recentSection: {
     marginBottom: 24,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#212121',
+    fontFamily: 'Inter-SemiBold',
     marginBottom: 12,
   },
   loader: {
     marginVertical: 20,
   },
   historyList: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 5,
-    elevation: 1,
+    marginBottom: 12,
   },
   historyItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    marginBottom: 8,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   historyItemContent: {
     flex: 1,
@@ -355,114 +363,100 @@ const styles = StyleSheet.create({
   },
   historyItemTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#212121',
+    fontFamily: 'Inter-Medium',
     marginBottom: 4,
   },
   historyItemTheme: {
     fontSize: 14,
-    color: '#616161',
+    color: '#757575',
     marginBottom: 4,
   },
   historyItemDate: {
     fontSize: 12,
     color: '#9E9E9E',
   },
-  emptyState: {
-    padding: 30,
+  viewAllButton: {
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    paddingVertical: 8,
+  },
+  viewAllText: {
+    color: '#4CAF50',
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
+    marginRight: 4,
+  },
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 32,
+    paddingHorizontal: 16,
     borderRadius: 12,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   emptyIcon: {
-    marginBottom: 12,
+    marginBottom: 16,
   },
   emptyText: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#616161',
-    marginBottom: 4,
+    fontFamily: 'Inter-Medium',
+    marginBottom: 8,
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: '#757575',
+    textAlign: 'center',
   },
   infoCard: {
     flexDirection: 'row',
-    backgroundColor: '#FFF8E1',
     borderRadius: 12,
     padding: 16,
     marginBottom: 20,
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
   },
   infoIcon: {
-    marginRight: 10,
-    marginTop: 2,
+    marginRight: 12,
+    alignSelf: 'flex-start',
   },
   infoContent: {
     flex: 1,
   },
   infoTitle: {
     fontSize: 16,
-    fontWeight: '500',
-    color: '#795548',
-    marginBottom: 4,
+    fontFamily: 'Inter-SemiBold',
+    marginBottom: 8,
   },
   infoText: {
     fontSize: 14,
-    color: '#795548',
     lineHeight: 20,
+    color: '#616161',
   },
   disclaimerContainer: {
-    marginTop: 8,
-    marginBottom: 20,
-    padding: 12,
-    backgroundColor: 'rgba(33, 150, 243, 0.08)',
-    borderRadius: 12,
-    borderLeftWidth: 2,
-    borderLeftColor: '#2196F3',
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    padding: 16,
+    marginBottom: 16,
+    backgroundColor: 'rgba(33, 150, 243, 0.1)',
+    borderRadius: 12,
   },
   disclaimerIcon: {
-    marginRight: 10,
-    marginTop: 2,
+    marginRight: 12,
+    alignSelf: 'flex-start',
   },
   disclaimerText: {
     flex: 1,
     fontSize: 13,
-    color: '#424242',
     lineHeight: 18,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-    paddingTop: 20,
-    borderTopWidth: 1,
-    borderTopColor: '#EEEEEE',
-  },
-  footerIcon: {
-    marginRight: 8,
-  },
-  footerText: {
-    fontSize: 14,
-    color: '#757575',
-  },
-  viewAllButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    marginTop: 8,
-    backgroundColor: '#F5F5F5',
-    borderRadius: 8,
-  },
-  viewAllText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#4CAF50',
-    marginRight: 4,
+    color: '#424242',
   },
 });
