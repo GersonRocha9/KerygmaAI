@@ -1,21 +1,20 @@
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { IconSymbol } from '@/components/ui/IconSymbol';
+import { Fonts } from '@/constants/Fonts';
+import { extractDevotionalParts, formatTitle } from '@/formatters/textFormatters';
+import { useThemeBorderRadius, useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
+import { shareDevotional } from '@/services/shareService';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { Fonts } from '@/constants/Fonts';
-import { extractDevotionalParts, formatTitle } from '@/formatters/textFormatters';
-import { shareDevotional } from '@/services/shareService';
 
 export default function DevotionalResultScreen() {
   const { title, content, theme, fromHistory } = useLocalSearchParams<{
@@ -26,7 +25,10 @@ export default function DevotionalResultScreen() {
   }>();
 
   const [isSharing, setIsSharing] = useState(false);
-  const [isSaved, setIsSaved] = useState(fromHistory === 'true');
+  const [isSaved] = useState(fromHistory === 'true');
+  const colors = useThemeColors();
+  const spacing = useThemeSpacing();
+  const borderRadius = useThemeBorderRadius();
 
   // Processar o conteúdo para exibição
   const processedTitle = formatTitle(title);
@@ -49,14 +51,13 @@ export default function DevotionalResultScreen() {
 
   return (
     <>
-      {/* Configuração do header nativo */}
       <Stack.Screen
         options={{
           headerShown: true,
           headerTitle: 'Devocional',
-          headerTintColor: '#4CAF50',
+          headerTintColor: colors.primary,
           headerTitleStyle: {
-            color: '#4CAF50',
+            color: colors.primary,
             fontWeight: 'bold',
           },
           headerBackTitle: 'Voltar',
@@ -67,12 +68,12 @@ export default function DevotionalResultScreen() {
               disabled={isSharing}
             >
               {isSharing ? (
-                <ActivityIndicator size="small" color="#4CAF50" />
+                <ActivityIndicator size="small" color={colors.primary} />
               ) : (
                 <IconSymbol
                   size={24}
                   name="square.and.arrow.up"
-                  color="#4CAF50"
+                  color={colors.primary}
                 />
               )}
             </TouchableOpacity>
@@ -81,12 +82,31 @@ export default function DevotionalResultScreen() {
       />
 
       <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
-        <ScrollView style={styles.contentContainer} contentContainerStyle={styles.scrollContent}>
-          <ThemedView style={styles.devotionalContainer}>
+        <ScrollView style={styles.contentContainer} contentContainerStyle={[styles.scrollContent, { padding: spacing.md }]}>
+          <ThemedView
+            variant="cardVariant"
+            style={[
+              styles.devotionalContainer,
+              {
+                borderRadius: borderRadius.lg,
+                padding: spacing.md,
+              }
+            ]}
+          >
             {/* Título do Devocional */}
             {processedTitle && (
-              <View style={styles.devotionalTitleContainer}>
-                <ThemedText style={styles.devotionalTitle}>
+              <View
+                style={[
+                  styles.devotionalTitleContainer,
+                  {
+                    marginBottom: spacing.md,
+                    paddingBottom: spacing.sm,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.border,
+                  }
+                ]}
+              >
+                <ThemedText variant="primary" style={styles.devotionalTitle}>
                   {processedTitle}
                 </ThemedText>
               </View>
@@ -97,26 +117,61 @@ export default function DevotionalResultScreen() {
               <>
                 {/* Versículo */}
                 {devotionalParts.verse && (
-                  <View style={styles.verseContainer}>
+                  <ThemedView
+                    variant="card"
+                    style={[
+                      styles.verseContainer,
+                      {
+                        borderRadius: borderRadius.md,
+                        padding: spacing.md,
+                        marginBottom: spacing.md,
+                      }
+                    ]}
+                  >
                     <IconSymbol
                       size={20}
                       name="quote.opening"
-                      color="#4CAF50"
+                      color={colors.primary}
                       style={styles.quoteIcon}
                     />
-                    <ThemedText style={styles.verseText}>{devotionalParts.verse}</ThemedText>
+                    <ThemedText variant="primary" style={styles.verseText}>
+                      {devotionalParts.verse}
+                    </ThemedText>
                     {devotionalParts.reference && (
-                      <ThemedText style={styles.verseReference}>{devotionalParts.reference}</ThemedText>
+                      <ThemedText
+                        variant="secondary"
+                        style={[styles.verseReference, { color: colors.primary }]}
+                      >
+                        {devotionalParts.reference}
+                      </ThemedText>
                     )}
-                  </View>
+                  </ThemedView>
                 )}
 
                 {/* Introdução */}
                 {devotionalParts.introducaoParagraphs.length > 0 && (
                   <>
-                    <ThemedText style={styles.sectionTitle}>Introdução</ThemedText>
+                    <ThemedText
+                      variant="primary"
+                      style={[
+                        styles.sectionTitle,
+                        {
+                          marginTop: spacing.sm,
+                          marginBottom: spacing.sm,
+                          borderLeftWidth: 3,
+                          borderLeftColor: colors.primary,
+                          paddingLeft: spacing.sm,
+                        }
+                      ]}
+                    >
+                      Introdução
+                    </ThemedText>
                     {devotionalParts.introducaoParagraphs.map((paragraph: string, index: number) => (
-                      <ThemedText key={`intro-${index}`} style={styles.paragraph}>
+                      <ThemedText
+                        key={`intro-${index}`}
+                        variant="secondary"
+                        style={[styles.paragraph, { marginBottom: spacing.md }]}
+                      >
                         {paragraph.trim()}
                       </ThemedText>
                     ))}
@@ -127,11 +182,27 @@ export default function DevotionalResultScreen() {
                 {devotionalParts.topicos.length > 0 &&
                   devotionalParts.topicos.map((topico, topicoIndex) => (
                     <View key={`topico-${topicoIndex}`}>
-                      <ThemedText style={styles.topicoTitle}>
+                      <ThemedText
+                        variant="primary"
+                        style={[
+                          styles.topicoTitle,
+                          {
+                            marginTop: spacing.md,
+                            marginBottom: spacing.sm,
+                            paddingBottom: spacing.xs,
+                            borderBottomWidth: 1,
+                            borderBottomColor: colors.border,
+                          }
+                        ]}
+                      >
                         {topico.titulo}
                       </ThemedText>
                       {topico.paragraphs.map((paragraph: string, paragraphIndex: number) => (
-                        <ThemedText key={`topico-${topicoIndex}-p-${paragraphIndex}`} style={styles.paragraph}>
+                        <ThemedText
+                          key={`topico-${topicoIndex}-p-${paragraphIndex}`}
+                          variant="secondary"
+                          style={[styles.paragraph, { marginBottom: spacing.md }]}
+                        >
                           {paragraph.trim()}
                         </ThemedText>
                       ))}
@@ -142,9 +213,27 @@ export default function DevotionalResultScreen() {
                 {/* Conclusão */}
                 {devotionalParts.conclusaoParagraphs.length > 0 && (
                   <>
-                    <ThemedText style={styles.sectionTitle}>Conclusão</ThemedText>
+                    <ThemedText
+                      variant="primary"
+                      style={[
+                        styles.sectionTitle,
+                        {
+                          marginTop: spacing.sm,
+                          marginBottom: spacing.sm,
+                          borderLeftWidth: 3,
+                          borderLeftColor: colors.primary,
+                          paddingLeft: spacing.sm,
+                        }
+                      ]}
+                    >
+                      Conclusão
+                    </ThemedText>
                     {devotionalParts.conclusaoParagraphs.map((paragraph: string, index: number) => (
-                      <ThemedText key={`conclusao-${index}`} style={styles.paragraph}>
+                      <ThemedText
+                        key={`conclusao-${index}`}
+                        variant="secondary"
+                        style={[styles.paragraph, { marginBottom: spacing.md }]}
+                      >
                         {paragraph.trim()}
                       </ThemedText>
                     ))}
@@ -154,9 +243,27 @@ export default function DevotionalResultScreen() {
                 {/* Oração */}
                 {devotionalParts.oracaoParagraphs.length > 0 && (
                   <>
-                    <ThemedText style={styles.sectionTitle}>Oração</ThemedText>
+                    <ThemedText
+                      variant="primary"
+                      style={[
+                        styles.sectionTitle,
+                        {
+                          marginTop: spacing.sm,
+                          marginBottom: spacing.sm,
+                          borderLeftWidth: 3,
+                          borderLeftColor: colors.primary,
+                          paddingLeft: spacing.sm,
+                        }
+                      ]}
+                    >
+                      Oração
+                    </ThemedText>
                     {devotionalParts.oracaoParagraphs.map((paragraph: string, index: number) => (
-                      <ThemedText key={`oracao-${index}`} style={[styles.paragraph, styles.prayerText]}>
+                      <ThemedText
+                        key={`oracao-${index}`}
+                        variant="secondary"
+                        style={[styles.paragraph, styles.prayerText, { marginBottom: spacing.md }]}
+                      >
                         {paragraph.trim()}
                       </ThemedText>
                     ))}
@@ -167,14 +274,24 @@ export default function DevotionalResultScreen() {
           </ThemedView>
 
           {/* Disclaimer */}
-          <View style={styles.disclaimerContainer}>
+          <View
+            style={[
+              styles.disclaimerContainer,
+              {
+                borderRadius: borderRadius.md,
+                padding: spacing.sm,
+                marginTop: spacing.md,
+                backgroundColor: colors.surfaceVariant,
+              }
+            ]}
+          >
             <IconSymbol
               size={18}
               name="info.circle.fill"
-              color="#757575"
-              style={styles.disclaimerIcon}
+              color={colors.textSecondary}
+              style={[styles.disclaimerIcon, { marginTop: 3 }]}
             />
-            <ThemedText style={styles.disclaimerText}>
+            <ThemedText variant="tertiary" style={styles.disclaimerText}>
               Este conteúdo é gerado por IA e não substitui a leitura direta da Bíblia, a orientação pastoral ou a inspiração do Espírito Santo. Busque sempre a Palavra de Deus como fonte primária de verdade e sabedoria.
             </ThemedText>
           </View>
@@ -187,13 +304,6 @@ export default function DevotionalResultScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    ...Platform.select({
-      android: {
-        paddingTop: 8,
-        paddingBottom: 8
-      }
-    })
   },
   headerShareButton: {
     width: 40,
@@ -206,31 +316,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollContent: {
-    padding: 16,
-    paddingBottom: 32,
+    flexGrow: 1,
   },
   devotionalContainer: {
-    backgroundColor: '#F5F5F5',
-    borderRadius: 12,
-    padding: 16,
+    flex: 1,
   },
   devotionalTitleContainer: {
-    marginBottom: 16,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0,0,0,0.05)',
+    alignItems: 'center',
   },
   devotionalTitle: {
     fontSize: 24,
     fontFamily: Fonts.bold,
-    color: '#333333',
     textAlign: 'center',
   },
   verseContainer: {
-    backgroundColor: '#E8F5E9',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
     position: 'relative',
   },
   quoteIcon: {
@@ -243,7 +342,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: Fonts.medium,
     fontStyle: 'italic',
-    color: '#555555',
     marginBottom: 8,
     textAlign: 'center',
   },
@@ -251,60 +349,36 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: Fonts.regular,
     textAlign: 'right',
-    marginBottom: 16,
     fontWeight: 'bold',
-    color: '#4CAF50',
     alignSelf: 'flex-end',
   },
   paragraph: {
     fontSize: 16,
     lineHeight: 24,
-    marginBottom: 16,
     textAlign: 'justify',
     fontFamily: Fonts.regular,
   },
   sectionTitle: {
     fontSize: 18,
-    fontWeight: 'bold',
     fontFamily: Fonts.semiBold,
-    color: '#2E7D32',
-    marginTop: 8,
-    marginBottom: 12,
-    borderLeftWidth: 3,
-    borderLeftColor: '#4CAF50',
-    paddingLeft: 10,
   },
   topicoTitle: {
     fontSize: 17,
-    fontWeight: 'bold',
     fontFamily: Fonts.semiBold,
-    color: '#33691E',
-    marginTop: 16,
-    marginBottom: 8,
-    paddingBottom: 4,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(76, 175, 80, 0.2)',
   },
   prayerText: {
     fontStyle: 'italic',
-    color: '#546E7A',
   },
   disclaimerContainer: {
     flexDirection: 'row',
-    backgroundColor: '#EEEEEE',
-    borderRadius: 8,
-    padding: 12,
-    marginTop: 16,
     alignItems: 'flex-start',
   },
   disclaimerIcon: {
     marginRight: 8,
-    marginTop: 3,
   },
   disclaimerText: {
     flex: 1,
     fontSize: 12,
-    color: '#757575',
     lineHeight: 16,
   },
 }); 

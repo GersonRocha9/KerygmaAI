@@ -1,3 +1,4 @@
+import { useThemeColors } from '@/hooks/useTheme';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
@@ -7,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 // This is a shim for web and Android where the tab bar is generally opaque.
 export default function TabBarBackground() {
   const insets = useSafeAreaInsets();
+  const colors = useThemeColors();
 
   // Calculate extra padding for bottom safe area
   const bottomInset = Platform.OS === 'ios' ? insets.bottom : 0;
@@ -17,14 +19,18 @@ export default function TabBarBackground() {
       <View style={[styles.background, { paddingBottom: bottomInset }]}>
         <BlurView
           intensity={85}
-          tint="light"
+          tint={colors.surface === '#FFFFFF' ? 'light' : 'dark'}
           style={styles.blurView}
         />
         <LinearGradient
-          colors={['rgba(255,255,255,0.8)', 'rgba(255,255,255,0.85)', 'rgba(255,255,255,0.9)']}
+          colors={[
+            `${colors.surface}CC`,
+            `${colors.surface}D9`,
+            `${colors.surface}E6`,
+          ]}
           style={styles.gradientOverlay}
         />
-        <View style={styles.topBorder} />
+        <View style={[styles.topBorder, { backgroundColor: colors.border }]} />
       </View>
     );
   }
@@ -39,10 +45,10 @@ export default function TabBarBackground() {
       ]}
     >
       <LinearGradient
-        colors={['#FFFFFF', '#F8F9FA']}
+        colors={[colors.surface, colors.surfaceVariant]}
         style={styles.androidGradient}
       />
-      <View style={styles.topBorder} />
+      <View style={[styles.topBorder, { backgroundColor: colors.border }]} />
     </View>
   );
 }
@@ -56,31 +62,24 @@ export function useBottomTabOverflow() {
 const styles = StyleSheet.create({
   background: {
     position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 49,
+  },
+  blurView: {
+    position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    overflow: 'hidden',
-  },
-  blurView: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 1,
   },
   gradientOverlay: {
-    ...StyleSheet.absoluteFillObject,
-    zIndex: 2,
-    opacity: 0.7,
-  },
-  androidContainer: {
-    backgroundColor: '#FFFFFF',
-    elevation: 12,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 5,
-  },
-  androidGradient: {
-    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   topBorder: {
     position: 'absolute',
@@ -88,7 +87,19 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 1,
-    backgroundColor: Platform.OS === 'ios' ? 'rgba(0,0,0,0.06)' : '#E0E0E0',
-    zIndex: 3,
-  }
+  },
+  androidContainer: {
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  androidGradient: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
 });

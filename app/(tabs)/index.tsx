@@ -1,33 +1,31 @@
-import { useFocusEffect } from '@react-navigation/native';
-import { useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
-import {
-  ActivityIndicator,
-  Platform,
-  Pressable,
-  SafeAreaView,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View
-} from 'react-native';
-
+import { CreateDevotionalButton } from '@/components/CreateDevotionalButton';
+import { DevotionalListItem } from '@/components/DevotionalListItem';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { VerseCard } from '@/components/VerseCard';
 import { useTranslatedVerseOfTheDay } from '@/hooks/queries/useVerseOfTheDay';
-import { DevotionalHistory, loadRecentDevotionals } from '@/services/devotionalService';
+import { useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
+import { loadRecentDevotionals, type DevotionalHistory } from '@/services/devotionalService';
 import { shareVerse } from '@/services/shareService';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const colors = useThemeColors();
+  const spacing = useThemeSpacing();
   const [devotionalHistory, setDevotionalHistory] = useState<DevotionalHistory[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Utilize o hook personalizado para buscar o versículo do dia traduzido
+  const handleCreateDevotional = () => {
+    router.push('/devotional');
+  };
+
   const { data: translatedVerse, isLoading: verseLoading } = useTranslatedVerseOfTheDay();
 
-  // Carregar histórico de devocionais
   const loadDevotionalHistory = async () => {
     try {
       setLoading(true);
@@ -40,22 +38,13 @@ export default function HomeScreen() {
     }
   };
 
-  // Recarregar dados cada vez que a tela receber foco
   useFocusEffect(
     useCallback(() => {
       loadDevotionalHistory();
     }, [])
   );
 
-  const navigateToDevotional = () => {
-    router.push('/devotional');
-  };
-
-  const navigateToHistory = () => {
-    router.push('/history');
-  };
-
-  const openDevotionalResult = (item: DevotionalHistory) => {
+  const handleOpenDevotional = (item: DevotionalHistory) => {
     router.push({
       pathname: '/devotional-result',
       params: {
@@ -67,175 +56,136 @@ export default function HomeScreen() {
     });
   };
 
-  // Função para renderizar o versículo do dia
-  const renderVerse = () => {
-    if (verseLoading || !translatedVerse) {
-      return (
-        <ThemedView style={styles.verseCard}>
-          <View style={styles.verseHeader}>
-            <ThemedText style={styles.verseTitle}>Versículo do Dia</ThemedText>
-          </View>
-          <ActivityIndicator size="small" color="#4CAF50" style={{ marginVertical: 15 }} />
-        </ThemedView>
-      );
-    }
+  const handleViewAll = () => {
+    router.push('/history');
+  };
 
-    return (
-      <ThemedView style={styles.verseCard}>
-        <View style={styles.verseHeader}>
-          <ThemedText style={styles.verseTitle}>Versículo do Dia</ThemedText>
-          <TouchableOpacity
-            style={styles.shareButton}
-            onPress={() => {
-              if (translatedVerse) {
-                shareVerse(translatedVerse.text, translatedVerse.reference);
-              }
-            }}
-          >
-            <IconSymbol name="square.and.arrow.up" size={18} color="#4CAF50" />
-          </TouchableOpacity>
-        </View>
-        <ThemedText style={styles.verseText}>
-          {translatedVerse.text}
-        </ThemedText>
-        <ThemedText style={styles.verseReference}>
-          {translatedVerse.reference}
-        </ThemedText>
-      </ThemedView>
-    );
+  const handleShareVerse = async () => {
+    if (translatedVerse) {
+      await shareVerse(translatedVerse.text, translatedVerse.reference);
+    }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.header}>
+      <ScrollView style={styles.scrollContent} contentContainerStyle={{ padding: spacing.md }}>
+        <View style={[styles.header, { marginBottom: spacing.md }]}>
           <IconSymbol
-            size={28}
+            size={26}
             name="book.fill"
-            color="#4CAF50"
-            style={styles.headerIcon}
+            color={colors.primary}
+            style={{ marginRight: spacing.sm }}
           />
-          <ThemedText style={styles.headerTitle}>Devocional Diário</ThemedText>
+          <ThemedText type="title">KerygmaAI</ThemedText>
         </View>
 
-        {/* Versículo em Destaque */}
-        {renderVerse()}
-
-        {/* Botão Novo Devocional */}
-        <Pressable
-          style={({ pressed }) => [
-            styles.devotionalButton,
-            { opacity: pressed ? 0.9 : 1 }
-          ]}
-          onPress={navigateToDevotional}
-        >
-          <IconSymbol
-            size={24}
-            name="plus.circle.fill"
-            color="#FFFFFF"
-            style={styles.buttonIcon}
+        {verseLoading ? (
+          <ThemedView
+            variant="card"
+            style={[
+              styles.loadingContainer,
+              {
+                padding: spacing.md,
+                borderRadius: 12,
+                marginBottom: spacing.lg,
+              },
+            ]}
+          >
+            <ActivityIndicator size="small" color={colors.primary} />
+          </ThemedView>
+        ) : translatedVerse ? (
+          <VerseCard
+            verse={translatedVerse.text}
+            reference={translatedVerse.reference}
+            onShare={handleShareVerse}
           />
-          <ThemedText style={styles.buttonText}>
-            Criar Novo Devocional
-          </ThemedText>
-        </Pressable>
+        ) : null}
 
-        {/* Devocionais Recentes */}
-        <View style={styles.recentSection}>
-          <ThemedText style={styles.sectionTitle}>
-            Devocionais Recentes
-          </ThemedText>
+        <CreateDevotionalButton onPress={handleCreateDevotional} />
+
+        <View style={[styles.recentSection, { marginBottom: spacing.xl }]}>
+          <View style={[styles.sectionHeader, { marginBottom: spacing.sm }]}>
+            <ThemedText type="subtitle">
+              Devocionais Recentes
+            </ThemedText>
+            <TouchableOpacity
+              onPress={handleViewAll}
+              style={[styles.viewAllButton, { marginLeft: spacing.sm }]}
+            >
+              {devotionalHistory.length > 0 && (
+                <>
+                  <ThemedText
+                    variant="primary"
+                    style={[styles.viewAllText, { color: colors.primary, marginRight: spacing.xs }]}
+                  >
+                    Ver Todos
+                  </ThemedText>
+                  <IconSymbol
+                    name="arrow.right"
+                    size={16}
+                    color={colors.primary}
+                  />
+                </>
+              )}
+            </TouchableOpacity>
+          </View>
 
           {loading ? (
-            <ActivityIndicator size="large" color="#4CAF50" style={styles.loader} />
+            <ActivityIndicator size="large" color={colors.primary} />
           ) : devotionalHistory.length > 0 ? (
-            <>
-              <View style={styles.historyList}>
-                {devotionalHistory.map((item) => (
-                  <TouchableOpacity
-                    key={item.id}
-                    style={styles.historyItem}
-                    onPress={() => openDevotionalResult(item)}
-                  >
-                    <View style={styles.historyItemContent}>
-                      <ThemedText style={styles.historyItemTitle} numberOfLines={1}>
-                        {item.title}
-                      </ThemedText>
-                      <ThemedText style={styles.historyItemTheme} numberOfLines={1}>
-                        Tema: {item.theme}
-                      </ThemedText>
-                      <ThemedText style={styles.historyItemDate}>
-                        {item.date}
-                      </ThemedText>
-                    </View>
-                    <IconSymbol
-                      name="chevron.right"
-                      size={18}
-                      color="#757575"
-                    />
-                  </TouchableOpacity>
-                ))}
-              </View>
-
-              <TouchableOpacity
-                style={styles.viewAllButton}
-                onPress={navigateToHistory}
-              >
-                <ThemedText style={styles.viewAllText}>
-                  Ver Todos
-                </ThemedText>
-                <IconSymbol
-                  name="arrow.right"
-                  size={16}
-                  color="#4CAF50"
+            <View style={styles.historyList}>
+              {devotionalHistory.map((item) => (
+                <DevotionalListItem
+                  key={item.id}
+                  title={item.title}
+                  theme={item.theme}
+                  date={item.date}
+                  onPress={() => handleOpenDevotional(item)}
                 />
-              </TouchableOpacity>
-            </>
+              ))}
+            </View>
           ) : (
-            <ThemedView style={styles.emptyState}>
-              <IconSymbol
-                size={40}
-                name="book.closed.fill"
-                color="#BDBDBD"
-                style={styles.emptyIcon}
-              />
-              <ThemedText style={styles.emptyText}>
-                Nenhum devocional recente
-              </ThemedText>
-              <ThemedText style={styles.emptySubtext}>
-                Seus devocionais aparecerão aqui
-              </ThemedText>
-            </ThemedView>
+            <ThemedText variant="secondary" style={styles.noHistoryText}>
+              Nenhuma devocional recente encontrada.
+            </ThemedText>
           )}
         </View>
 
-        {/* Seção informativa */}
-        <ThemedView style={styles.infoCard}>
+        <ThemedView
+          variant="cardVariant"
+          style={[
+            styles.infoCard,
+            {
+              borderRadius: 12,
+              padding: spacing.md,
+              marginBottom: spacing.lg,
+            },
+          ]}
+        >
           <IconSymbol
             size={24}
             name="lightbulb.fill"
-            color="#FFB74D"
-            style={styles.infoIcon}
+            color={colors.warning}
+            style={{ marginRight: spacing.sm }}
           />
           <View style={styles.infoContent}>
-            <ThemedText style={styles.infoTitle}>
+            <ThemedText variant="primary" style={styles.infoTitle}>
               Como utilizar o aplicativo
             </ThemedText>
-            <ThemedText style={styles.infoText}>
+            <ThemedText variant="secondary" style={styles.infoText}>
               Acesse a aba Devocional, digite um tema de seu interesse e receba um devocional personalizado baseado em passagens bíblicas.
             </ThemedText>
           </View>
         </ThemedView>
 
-        {/* Disclaimer */}
-        <View style={styles.disclaimerContainer}>
+        <View style={[styles.disclaimerContainer, { marginBottom: spacing.xl }]}>
           <IconSymbol
             size={20}
             name="info.circle.fill"
-            color="#2196F3"
-            style={styles.disclaimerIcon}
+            color={colors.info}
+            style={{ marginRight: spacing.sm }}
           />
-          <ThemedText style={styles.disclaimerText}>
+          <ThemedText variant="tertiary" style={styles.disclaimerText}>
             Os devocionais são gerados por inteligência artificial e servem como complemento à sua jornada espiritual. Lembre-se sempre de buscar a Palavra de Deus como fonte primária de verdade.
           </ThemedText>
         </View>
@@ -247,216 +197,65 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
-    ...Platform.select({
-      android: {
-        paddingTop: 16,
-        paddingBottom: 8
-      }
-    })
   },
   scrollContent: {
-    padding: 16,
-    paddingBottom: 40,
+    flex: 1,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
   },
-  headerIcon: {
-    marginRight: 8,
-  },
-  headerTitle: {
-    fontSize: 22,
-    fontFamily: 'Inter-SemiBold',
-  },
-  verseCard: {
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  verseHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  verseTitle: {
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
-  },
-  shareButton: {
-    padding: 4,
-  },
-  verseText: {
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 12,
-    fontFamily: 'Inter-Regular',
-    fontStyle: 'italic',
-  },
-  verseReference: {
-    fontSize: 14,
-    fontFamily: 'Inter-Medium',
-    textAlign: 'right',
-  },
-  devotionalButton: {
-    backgroundColor: '#4CAF50',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
+  loadingContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  buttonIcon: {
-    marginRight: 8,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
+    minHeight: 120,
   },
   recentSection: {
-    marginBottom: 24,
+    flex: 1,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontFamily: 'Inter-SemiBold',
-    marginBottom: 12,
-  },
-  loader: {
-    marginVertical: 20,
-  },
-  historyList: {
-    marginBottom: 12,
-  },
-  historyItem: {
+  sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    marginBottom: 8,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  historyItemContent: {
-    flex: 1,
-    marginRight: 8,
-  },
-  historyItemTitle: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    marginBottom: 4,
-  },
-  historyItemTheme: {
-    fontSize: 14,
-    color: '#757575',
-    marginBottom: 4,
-  },
-  historyItemDate: {
-    fontSize: 12,
-    color: '#9E9E9E',
   },
   viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
   },
   viewAllText: {
-    color: '#4CAF50',
     fontSize: 14,
     fontFamily: 'Inter-Medium',
-    marginRight: 4,
   },
-  emptyState: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 32,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  emptyIcon: {
-    marginBottom: 16,
-  },
-  emptyText: {
-    fontSize: 16,
-    fontFamily: 'Inter-Medium',
-    marginBottom: 8,
-  },
-  emptySubtext: {
-    fontSize: 14,
-    color: '#757575',
-    textAlign: 'center',
+  historyList: {
+    flex: 1,
   },
   infoCard: {
     flexDirection: 'row',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 20,
-    backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  infoIcon: {
-    marginRight: 12,
-    alignSelf: 'flex-start',
+    alignItems: 'flex-start',
   },
   infoContent: {
     flex: 1,
   },
   infoTitle: {
     fontSize: 16,
-    fontFamily: 'Inter-SemiBold',
     marginBottom: 8,
+    fontFamily: 'Inter-SemiBold',
   },
   infoText: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#616161',
   },
   disclaimerContainer: {
     flexDirection: 'row',
-    padding: 16,
-    marginBottom: 16,
-    backgroundColor: 'rgba(33, 150, 243, 0.1)',
-    borderRadius: 12,
-  },
-  disclaimerIcon: {
-    marginRight: 12,
-    alignSelf: 'flex-start',
+    alignItems: 'flex-start',
   },
   disclaimerText: {
     flex: 1,
-    fontSize: 13,
-    lineHeight: 18,
-    color: '#424242',
+    fontSize: 12,
+    lineHeight: 16,
+  },
+  noHistoryText: {
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
   },
 });
