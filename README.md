@@ -2,6 +2,18 @@
 
 A mobile application that uses artificial intelligence to generate personalized devotionals based on themes chosen by the user.
 
+## 📲 Download
+
+<div align="center" style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 20px;">
+  <a href="https://apps.apple.com/br/app/kerygmaai/id6742852987?l=en-GB">
+    <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83" alt="Download on the App Store" style="width: 200px;">
+  </a>
+  
+  <a href="https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME">
+    <img alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" style="width: 240px;">
+  </a>
+</div>
+
 ## 📋 Meaning of the Name
 
 **KerygmaAI** combines two powerful concepts:
