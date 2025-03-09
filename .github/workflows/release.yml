@@ -50,9 +50,9 @@ jobs:
                   "commits_by_message": "^chore\\(deps\\):"
                 }
               ],
-              "template": "${{CHANGELOG}}",
-              "pr_template": "- ${{TITLE}} (#${{NUMBER}})",
-              "commit_template": "- ${{SUBJECT}}",
+              "template": "{{CHANGELOG}}",
+              "pr_template": "- {{TITLE}} (#{{NUMBER}})",
+              "commit_template": "- {{SUBJECT}}",
               "empty_template": "- No changes",
               "trim_values": true,
               "sort": "ASC"
