@@ -19,6 +19,7 @@ import * as z from 'zod';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useLanguage } from '@/hooks/useLanguage';
 import { useThemeBorderRadius, useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
 import { generateDevotional } from '@/services/aiService';
 import { saveDevotionalToHistory } from '@/services/devotionalService';
@@ -38,6 +39,7 @@ export default function DevotionalScreen() {
   const colors = useThemeColors();
   const spacing = useThemeSpacing();
   const borderRadius = useThemeBorderRadius();
+  const { t } = useLanguage();
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -68,10 +70,10 @@ export default function DevotionalScreen() {
 
         reset();
       } else {
-        throw new Error('Nenhum conteúdo retornado pela API');
+        throw new Error(t('devotional.noContentError'));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Falha ao gerar o devocional');
+      setError(err instanceof Error ? err.message : t('devotional.apiError'));
       console.error('Erro ao gerar devocional:', err);
     } finally {
       setLoading(false);
@@ -93,7 +95,7 @@ export default function DevotionalScreen() {
               style={{ marginRight: spacing.sm }}
             />
             <ThemedText variant="primary" type="subtitle">
-              KerygmaAI
+              {t('common.appName')}
             </ThemedText>
           </View>
 
@@ -109,7 +111,7 @@ export default function DevotionalScreen() {
               ]}
             >
               <ThemedText variant="primary" style={styles.label}>
-                Qual tema você gostaria de refletir hoje?
+                {t('devotional.questionPrompt')}
               </ThemedText>
 
               <Controller
@@ -126,7 +128,7 @@ export default function DevotionalScreen() {
                         color: colors.textPrimary,
                       }
                     ]}
-                    placeholder="ex: paciência, perdão, confiança, esperança..."
+                    placeholder={t('devotional.themePlaceholder')}
                     placeholderTextColor={colors.textTertiary}
                     value={value}
                     onChangeText={onChange}
@@ -140,7 +142,7 @@ export default function DevotionalScreen() {
 
               {errors.theme && (
                 <ThemedText style={[styles.errorMessage, { color: colors.error }]}>
-                  {errors.theme.message}
+                  {t('devotional.themeError')}
                 </ThemedText>
               )}
 
@@ -160,7 +162,7 @@ export default function DevotionalScreen() {
                       <ActivityIndicator color={colors.primary} size="small" />
                     ) : (
                       <ThemedText style={[styles.buttonText, { color: colors.surface }]}>
-                        Gerar Devocional
+                        {t('devotional.generateButton')}
                       </ThemedText>
                     )}
                   </ThemedView>
@@ -187,10 +189,9 @@ export default function DevotionalScreen() {
                   style={{ marginRight: spacing.sm }}
                 />
                 <ThemedText variant="secondary" style={styles.disclaimerText}>
-                  Os devocionais são gerados por inteligência artificial e servem como complemento à sua jornada espiritual. Lembre-se sempre de buscar a Palavra de Deus como fonte primária de verdade.
+                  {t('devotional.disclaimer')}
                 </ThemedText>
               </View>
-
 
               {error ? (
                 <ThemedText style={[styles.errorText, { color: colors.error, marginTop: spacing.sm }]}>
@@ -217,8 +218,7 @@ export default function DevotionalScreen() {
                 style={{ marginRight: spacing.sm }}
               />
               <ThemedText variant="secondary" style={styles.infoText}>
-                Digite um tema ou assunto para receber um devocional personalizado sobre ele.
-                Exemplos: "esperança em tempos difíceis", "amor ao próximo", "confiar em Deus", etc.
+                {t('devotional.howToUseDescription')}
               </ThemedText>
             </ThemedView>
           </ScrollView>

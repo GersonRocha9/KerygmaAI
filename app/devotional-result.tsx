@@ -3,6 +3,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { Fonts } from '@/constants/Fonts';
 import { extractDevotionalParts, formatTitle } from '@/formatters/textFormatters';
+import { useLanguage } from '@/hooks/useLanguage';
 import { useThemeBorderRadius, useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
 import { shareDevotional } from '@/services/shareService';
 import { Stack, useLocalSearchParams } from 'expo-router';
@@ -29,6 +30,7 @@ export default function DevotionalResultScreen() {
   const colors = useThemeColors();
   const spacing = useThemeSpacing();
   const borderRadius = useThemeBorderRadius();
+  const { t } = useLanguage();
 
   // Processar o conteúdo para exibição
   const processedTitle = formatTitle(title);
@@ -39,10 +41,10 @@ export default function DevotionalResultScreen() {
     if (content) {
       setIsSharing(true);
       try {
-        const contentToShare = `${processedTitle || 'Devocional'}\n\n${content}`;
-        await shareDevotional(contentToShare, processedTitle || 'Devocional Diário');
+        const contentToShare = `${processedTitle || t('devotionalResult.title')}\n\n${content}`;
+        await shareDevotional(contentToShare, processedTitle || t('devotionalResult.title'));
       } catch (error) {
-        console.error('Erro ao compartilhar:', error);
+        console.error(t('devotionalResult.shareError'), error);
       } finally {
         setIsSharing(false);
       }
@@ -54,13 +56,13 @@ export default function DevotionalResultScreen() {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: 'Devocional',
+          headerTitle: t('devotionalResult.title'),
           headerTintColor: colors.primary,
           headerTitleStyle: {
             color: colors.primary,
             fontWeight: 'bold',
           },
-          headerBackTitle: 'Voltar',
+          headerBackTitle: t('common.back'),
           headerRight: () => (
             <TouchableOpacity
               style={styles.headerShareButton}
@@ -164,7 +166,7 @@ export default function DevotionalResultScreen() {
                         }
                       ]}
                     >
-                      Introdução
+                      {t('devotionalResult.introduction')}
                     </ThemedText>
                     {devotionalParts.introducaoParagraphs.map((paragraph: string, index: number) => (
                       <ThemedText
@@ -226,7 +228,7 @@ export default function DevotionalResultScreen() {
                         }
                       ]}
                     >
-                      Conclusão
+                      {t('devotionalResult.conclusion')}
                     </ThemedText>
                     {devotionalParts.conclusaoParagraphs.map((paragraph: string, index: number) => (
                       <ThemedText
@@ -256,7 +258,7 @@ export default function DevotionalResultScreen() {
                         }
                       ]}
                     >
-                      Oração
+                      {t('devotionalResult.prayer')}
                     </ThemedText>
                     {devotionalParts.oracaoParagraphs.map((paragraph: string, index: number) => (
                       <ThemedText
@@ -292,7 +294,7 @@ export default function DevotionalResultScreen() {
               style={[styles.disclaimerIcon, { marginTop: 3 }]}
             />
             <ThemedText variant="tertiary" style={styles.disclaimerText}>
-              Este conteúdo é gerado por IA e não substitui a leitura direta da Bíblia, a orientação pastoral ou a inspiração do Espírito Santo. Busque sempre a Palavra de Deus como fonte primária de verdade e sabedoria.
+              {t('devotionalResult.disclaimer')}
             </ThemedText>
           </View>
         </ScrollView>

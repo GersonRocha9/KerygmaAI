@@ -5,6 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
 import { VerseCard } from '@/components/VerseCard';
 import { useTranslatedVerseOfTheDay } from '@/hooks/queries/useVerseOfTheDay';
+import { useLanguage } from '@/hooks/useLanguage';
 import { useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
 import { loadRecentDevotionals, type DevotionalHistory } from '@/services/devotionalService';
 import { shareVerse } from '@/services/shareService';
@@ -17,6 +18,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const colors = useThemeColors();
   const spacing = useThemeSpacing();
+  const { t, toggleLanguage, isEnglish } = useLanguage();
   const [devotionalHistory, setDevotionalHistory] = useState<DevotionalHistory[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -70,13 +72,23 @@ export default function HomeScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContent} contentContainerStyle={{ padding: spacing.md }}>
         <View style={[styles.header, { marginBottom: spacing.md }]}>
-          <IconSymbol
-            size={26}
-            name="book.fill"
-            color={colors.primary}
-            style={{ marginRight: spacing.sm }}
-          />
-          <ThemedText type="title">KerygmaAI</ThemedText>
+          <View style={styles.headerLeft}>
+            <IconSymbol
+              size={26}
+              name="book.fill"
+              color={colors.primary}
+              style={{ marginRight: spacing.sm }}
+            />
+            <ThemedText type="title">{t('common.appName')}</ThemedText>
+          </View>
+          <TouchableOpacity
+            onPress={toggleLanguage}
+            style={[styles.languageButton, { backgroundColor: colors.primary }]}
+          >
+            <ThemedText style={styles.languageButtonText}>
+              {isEnglish ? 'EN' : 'PT'}
+            </ThemedText>
+          </TouchableOpacity>
         </View>
 
         {verseLoading ? (
@@ -106,7 +118,7 @@ export default function HomeScreen() {
         <View style={[styles.recentSection, { marginBottom: spacing.xl }]}>
           <View style={[styles.sectionHeader, { marginBottom: spacing.sm }]}>
             <ThemedText type="subtitle">
-              Devocionais Recentes
+              {t('home.recentDevotionals')}
             </ThemedText>
             <TouchableOpacity
               onPress={handleViewAll}
@@ -118,7 +130,7 @@ export default function HomeScreen() {
                     variant="primary"
                     style={[styles.viewAllText, { color: colors.primary, marginRight: spacing.xs }]}
                   >
-                    Ver Todos
+                    {t('home.viewAll')}
                   </ThemedText>
                   <IconSymbol
                     name="arrow.right"
@@ -146,7 +158,7 @@ export default function HomeScreen() {
             </View>
           ) : (
             <ThemedText variant="secondary" style={styles.noHistoryText}>
-              Nenhuma devocional recente encontrada.
+              {t('home.noDevotionals')}
             </ThemedText>
           )}
         </View>
@@ -170,10 +182,10 @@ export default function HomeScreen() {
           />
           <View style={styles.infoContent}>
             <ThemedText variant="primary" style={styles.infoTitle}>
-              Como utilizar o aplicativo
+              {t('home.howToUse')}
             </ThemedText>
             <ThemedText variant="secondary" style={styles.infoText}>
-              Acesse a aba Devocional, digite um tema de seu interesse e receba um devocional personalizado baseado em passagens bíblicas.
+              {t('home.howToUseDescription')}
             </ThemedText>
           </View>
         </ThemedView>
@@ -186,7 +198,7 @@ export default function HomeScreen() {
             style={{ marginRight: spacing.sm }}
           />
           <ThemedText variant="tertiary" style={styles.disclaimerText}>
-            Os devocionais são gerados por inteligência artificial e servem como complemento à sua jornada espiritual. Lembre-se sempre de buscar a Palavra de Deus como fonte primária de verdade.
+            {t('home.disclaimer')}
           </ThemedText>
         </View>
       </ScrollView>
@@ -204,6 +216,21 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  languageButton: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  languageButtonText: {
+    color: '#FFFFFF',
+    fontSize: 14,
+    fontFamily: 'Inter-Medium',
   },
   loadingContainer: {
     alignItems: 'center',

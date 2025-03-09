@@ -1,0 +1,66 @@
+{
+  "common": {
+    "appName": "KerygmaAI",
+    "welcome": "Bem-vindo ao KerygmaAI",
+    "description": "Seu companheiro devocional",
+    "back": "Voltar",
+    "loading": "Carregando...",
+    "error": "Erro",
+    "cancel": "Cancelar",
+    "clear": "Limpar"
+  },
+  "tabs": {
+    "home": "Início",
+    "devotional": "Devocional",
+    "history": "Histórico"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signInWithApple": "Entrar com Apple",
+    "signOut": "Sair"
+  },
+  "home": {
+    "recentDevotionals": "Devocionais Recentes",
+    "viewAll": "Ver Todos",
+    "noDevotionals": "Nenhuma devocional recente encontrada.",
+    "howToUse": "Como utilizar o aplicativo",
+    "howToUseDescription": "Acesse a aba Devocional, digite um tema de seu interesse e receba um devocional personalizado baseado em passagens bíblicas.",
+    "disclaimer": "Os devocionais são gerados por inteligência artificial e servem como complemento à sua jornada espiritual. Lembre-se sempre de buscar a Palavra de Deus como fonte primária de verdade.",
+    "createNewDevotional": "Criar Novo Devocional",
+    "createNewDevotionalDescription": "Gere um devocional personalizado baseado em um tema de sua escolha"
+  },
+  "devotional": {
+    "create": "Criar Devocional",
+    "theme": "Tema",
+    "themePlaceholder": "ex: paciência, perdão, confiança, esperança...",
+    "generating": "Gerando devocional...",
+    "shareDevotional": "Compartilhar Devocional",
+    "history": "Histórico",
+    "questionPrompt": "Qual tema você gostaria de refletir hoje?",
+    "generateButton": "Gerar Devocional",
+    "themeError": "Por favor, digite um tema para o devocional",
+    "apiError": "Falha ao gerar o devocional",
+    "noContentError": "Nenhum conteúdo retornado pela API",
+    "howToUseTitle": "Como utilizar",
+    "howToUseDescription": "Digite um tema ou assunto para receber um devocional personalizado sobre ele. Exemplos: \"esperança em tempos difíceis\", \"amor ao próximo\", \"confiar em Deus\", etc.",
+    "disclaimer": "Os devocionais são gerados por inteligência artificial e servem como complemento à sua jornada espiritual. Lembre-se sempre de buscar a Palavra de Deus como fonte primária de verdade."
+  },
+  "history": {
+    "title": "Histórico de Devocionais",
+    "yourDevotionals": "Seus Devocionais",
+    "clearHistory": "Limpar Histórico",
+    "clearConfirmation": "Tem certeza que deseja limpar todo o histórico de devocionais?",
+    "clearError": "Não foi possível limpar o histórico",
+    "errorMessage": "Ocorreu um erro ao limpar o histórico",
+    "emptyTitle": "Nenhum devocional encontrado",
+    "emptyDescription": "Crie seu primeiro devocional na tela inicial"
+  },
+  "devotionalResult": {
+    "title": "Devocional",
+    "introduction": "Introdução",
+    "conclusion": "Conclusão",
+    "prayer": "Oração",
+    "shareError": "Erro ao compartilhar",
+    "disclaimer": "Este conteúdo é gerado por IA e não substitui a leitura direta da Bíblia, a orientação pastoral ou a inspiração do Espírito Santo. Busque sempre a Palavra de Deus como fonte primária de verdade e sabedoria."
+  }
+}

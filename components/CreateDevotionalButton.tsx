@@ -1,3 +1,4 @@
+import { useLanguage } from '@/hooks/useLanguage';
 import { useThemeBorderRadius, useThemeColors, useThemeElevation, useThemeSpacing } from '@/hooks/useTheme';
 import React from 'react';
 import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
@@ -13,6 +14,7 @@ export function CreateDevotionalButton({ onPress }: CreateDevotionalButtonProps)
   const spacing = useThemeSpacing();
   const borderRadius = useThemeBorderRadius();
   const elevation = useThemeElevation();
+  const { t } = useLanguage();
 
   return (
     <TouchableOpacity
@@ -53,7 +55,7 @@ export function CreateDevotionalButton({ onPress }: CreateDevotionalButtonProps)
           },
         ]}
       >
-        Criar Novo Devocional
+        {t('home.createNewDevotional')}
       </ThemedText>
     </TouchableOpacity>
   );

@@ -2,6 +2,7 @@ import { DevotionalListItem } from '@/components/DevotionalListItem';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+import { useLanguage } from '@/hooks/useLanguage';
 import { useThemeBorderRadius, useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
 import { clearDevotionalHistory, DevotionalHistory, loadDevotionalHistory } from '@/services/devotionalService';
 import { Stack, useRouter } from 'expo-router';
@@ -22,6 +23,7 @@ export default function HistoryScreen() {
   const borderRadius = useThemeBorderRadius();
   const [loading, setLoading] = useState(true);
   const [devotionalHistory, setDevotionalHistory] = useState<DevotionalHistory[]>([]);
+  const { t } = useLanguage();
 
   useEffect(() => {
     loadHistory();
@@ -53,15 +55,15 @@ export default function HistoryScreen() {
 
   const handleClearHistory = () => {
     Alert.alert(
-      "Limpar Histórico",
-      "Tem certeza que deseja limpar todo o histórico de devocionais?",
+      t('history.clearHistory'),
+      t('history.clearConfirmation'),
       [
         {
-          text: "Cancelar",
+          text: t('common.cancel'),
           style: "cancel"
         },
         {
-          text: "Limpar",
+          text: t('common.clear'),
           style: "destructive",
           onPress: async () => {
             try {
@@ -70,11 +72,11 @@ export default function HistoryScreen() {
               if (success) {
                 setDevotionalHistory([]);
               } else {
-                Alert.alert("Erro", "Não foi possível limpar o histórico");
+                Alert.alert(t('common.error'), t('history.clearError'));
               }
             } catch (error) {
               console.error("Erro ao limpar histórico:", error);
-              Alert.alert("Erro", "Ocorreu um erro ao limpar o histórico");
+              Alert.alert(t('common.error'), t('history.errorMessage'));
             } finally {
               setLoading(false);
             }
@@ -89,13 +91,13 @@ export default function HistoryScreen() {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: 'Histórico de Devocionais',
+          headerTitle: t('history.title'),
           headerTintColor: colors.primary,
           headerTitleStyle: {
             color: colors.primary,
             fontWeight: 'bold',
           },
-          headerBackTitle: 'Voltar',
+          headerBackTitle: t('common.back'),
         }}
       />
 
@@ -109,7 +111,7 @@ export default function HistoryScreen() {
               style={{ marginRight: spacing.sm }}
             />
             <ThemedText variant="primary" type="subtitle">
-              Seus Devocionais
+              {t('history.yourDevotionals')}
             </ThemedText>
           </View>
           {devotionalHistory.length > 0 && (
@@ -162,10 +164,10 @@ export default function HistoryScreen() {
               variant="primary"
               style={[styles.emptyText, { marginBottom: spacing.sm }]}
             >
-              Nenhum devocional encontrado
+              {t('history.emptyTitle')}
             </ThemedText>
             <ThemedText variant="tertiary" style={styles.emptySubtext}>
-              Crie seu primeiro devocional na tela inicial
+              {t('history.emptyDescription')}
             </ThemedText>
           </ThemedView>
         )}
