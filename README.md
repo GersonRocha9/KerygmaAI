@@ -1,95 +1,95 @@
 # KerygmaAI
 
-Um aplicativo mobile que utiliza inteligência artificial para gerar devocionais personalizados com base nos temas escolhidos pelo usuário.
+A mobile application that uses artificial intelligence to generate personalized devotionals based on themes chosen by the user.
 
-## 📋 Significado do Nome
+## 📋 Meaning of the Name
 
-**KerygmaAI** combina dois conceitos poderosos:
+**KerygmaAI** combines two powerful concepts:
 
-- **Kerygma** (κήρυγμα): Palavra grega que significa "proclamação" ou "anúncio", frequentemente utilizada para se referir à proclamação do Evangelho no cristianismo. É o ato de anunciar a mensagem cristã de maneira clara e acessível.
+- **Kerygma** (κήρυγμα): Greek word meaning "proclamation" or "announcement," often used to refer to the proclamation of the Gospel in Christianity. It is the act of announcing the Christian message in a clear and accessible way.
 
-- **AI** (Artificial Intelligence): Representa a tecnologia de inteligência artificial que permite a geração de conteúdo personalizado.
+- **AI** (Artificial Intelligence): Represents the artificial intelligence technology that enables the generation of personalized content.
 
-O nome simboliza a missão do aplicativo: utilizar tecnologia moderna (IA) para auxiliar na proclamação e reflexão sobre os ensinamentos cristãos, tornando-os mais acessíveis e personalizados para o dia a dia dos usuários.
+The name symbolizes the application's mission: to use modern technology (AI) to assist in the proclamation and reflection on Christian teachings, making them more accessible and personalized for users' daily lives.
 
 ## 📱 Screenshots
 
 <div align="center">
-  <!-- Adicione suas screenshots aqui. Exemplo: -->
-  <img src="screenshots/tela-inicial.png" width="250" alt="Tela inicial" />
-  <img src="screenshots/devocional.png" width="250" alt="Tela de devocional" />
-  <img src="screenshots/historico.png" width="250" alt="Histórico de devocionais" />
+  <!-- Add your screenshots here. Example: -->
+  <img src="screenshots/tela-inicial.png" width="250" alt="Home screen" />
+  <img src="screenshots/devocional.png" width="250" alt="Devotional screen" />
+  <img src="screenshots/historico.png" width="250" alt="Devotional history" />
 </div>
 
-## 💡 Sobre o Projeto
+## 💡 About the Project
 
-O KerygmaAI é um aplicativo desenvolvido para ajudar pessoas a terem momentos de reflexão espiritual personalizados. O usuário pode escolher um tema de interesse e o aplicativo gera automaticamente um devocional completo, incluindo:
+KerygmaAI is an application developed to help people have personalized spiritual reflection moments. The user can choose a topic of interest and the application automatically generates a complete devotional, including:
 
-- Versículo bíblico relacionado
-- Introdução ao tema
-- Tópicos de estudo detalhados
-- Conclusão
-- Oração final
+- Related Bible verse
+- Introduction to the theme
+- Detailed study topics
+- Conclusion
+- Final prayer
 
-Os devocionais gerados são salvos automaticamente no histórico do usuário para consulta posterior, podendo ser compartilhados com amigos e familiares.
+Generated devotionals are automatically saved in the user's history for later reference and can be shared with friends and family.
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Technologies Used
 
-- **React Native** - Framework para desenvolvimento mobile
-- **Expo** - Plataforma para desenvolvimento React Native
-- **TypeScript** - Linguagem fortemente tipada baseada em JavaScript
-- **React Hook Form** - Gerenciamento de formulários
-- **Zod** - Validação de formulários
-- **OpenAI API** - Geração de conteúdo por IA
-- **Async Storage** - Armazenamento local de dados
-- **Expo Vector Icons** - Ícones consistentes entre plataformas
-- **Expo Router** - Navegação entre telas
+- **React Native** - Mobile development framework
+- **Expo** - Platform for React Native development
+- **TypeScript** - Strongly typed language based on JavaScript
+- **React Hook Form** - Form management
+- **Zod** - Form validation
+- **OpenAI API** - AI content generation
+- **Async Storage** - Local data storage
+- **Expo Vector Icons** - Consistent icons across platforms
+- **Expo Router** - Navigation between screens
 
-## ✨ Funcionalidades
+## ✨ Features
 
-- Geração de devocionais personalizados com IA
-- Interface amigável e intuitiva
-- Histórico de devocionais consultados
-- Compartilhamento de devocionais via aplicativos de mensagem
-- Suporte para temas claro e escuro
-- Interface adaptada para iOS e Android
+- Generation of personalized devotionals with AI
+- Friendly and intuitive interface
+- History of consulted devotionals
+- Sharing devotionals via messaging apps
+- Support for light and dark themes
+- Interface adapted for iOS and Android
 
-## 🛠️ Instalação e Uso
+## 🛠️ Installation and Usage
 
-1. Clone o repositório:
+1. Clone the repository:
 ```bash
 git clone https://github.com/GersonRocha9/kerygma-ai.git
 cd kerygma-ai
 ```
 
-2. Instale as dependências:
+2. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Crie um arquivo `.env` com as variáveis de ambiente necessárias:
+3. Create a `.env` file with the necessary environment variables:
 ```
-EXPO_PUBLIC_OPENAI_API_KEY=sua_chave_api_aqui
+EXPO_PUBLIC_OPENAI_API_KEY=your_api_key_here
 ```
 
-4. Execute o projeto:
+4. Run the project:
 ```bash
 npx expo start
 ```
 
-## 📝 Notas Importantes
+## 📝 Important Notes
 
-- O conteúdo gerado por IA serve como complemento à reflexão espiritual, não substitui a leitura direta da Bíblia ou orientação pastoral.
-- É necessária uma chave de API da OpenAI para o funcionamento completo do aplicativo.
+- The AI-generated content serves as a complement to spiritual reflection, it does not replace direct Bible reading or pastoral guidance.
+- An OpenAI API key is required for the full functionality of the application.
 
-## 🤝 Contribuindo
+## 🤝 Contributing
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou enviar um pull request.
+Contributions are welcome! Feel free to open an issue or submit a pull request.
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para detalhes.
+This project is licensed under the MIT license - see the LICENSE file for details.
 
 ---
 
-Desenvolvido com 💚 e ☕
+Developed with 💚 and ☕
