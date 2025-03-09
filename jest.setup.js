@@ -1,6 +1,27 @@
 // Import matchers from testing library
 import '@testing-library/react-native';
 
+// Suprimir logs de console.error durante testes para evitar poluição na saída
+const originalConsoleError = console.error;
+beforeAll(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      (args[0].includes('Erro ao compartilhar devocional') ||
+        args[0].includes('Erro ao gerar devocional') ||
+        args[0].includes('Erro ao buscar versículo do dia'))
+    ) {
+      // Silencia os erros específicos que são esperados durante os testes
+      return;
+    }
+    originalConsoleError(...args);
+  };
+});
+
+afterAll(() => {
+  console.error = originalConsoleError;
+});
+
 // Mock expo-font
 jest.mock('expo-font');
 
