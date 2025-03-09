@@ -24,14 +24,52 @@ export interface TranslatedVerse {
 /**
  * Solicita a geração de um devocional baseado em um tema
  * @param theme O tema para o devocional
+ * @param isEnglish Se o devocional deve ser gerado em inglês (se false, será gerado em português)
  * @returns Título e conteúdo do devocional gerado
  */
-export const generateDevotional = async (theme: string): Promise<AIResponse> => {
+export const generateDevotional = async (theme: string, isEnglish: boolean = false): Promise<AIResponse> => {
   if (!theme.trim()) {
-    throw new Error('Por favor, digite um tema para o devocional');
+    throw new Error(isEnglish ? 'Please enter a theme for the devotional' : 'Por favor, digite um tema para o devocional');
   }
 
   try {
+    console.log(`Generating devotional for theme "${theme}" in ${isEnglish ? 'English' : 'Portuguese'}`);
+
+    // Define a instrução do sistema com base no idioma
+    const systemPrompt = isEnglish
+      ? `You are an attentive spiritual guide who creates deep and detailed devotionals. 
+Write a structured devotional in the format of a Bible study with the following structure:
+
+1. A relevant title for the theme: "${theme}"
+2. An introduction that contextualizes the theme
+3. One or two Bible verses that relate to the theme
+4. A reflection on the verses and how they apply to the theme
+5. A brief practical application for daily life
+6. A short closing prayer
+
+Important:
+- Write entirely in English
+- The output must be well formatted
+- Ensure the verses are accurate
+- Be respectful and ecumenical
+- Length: approximately 500-800 words`
+      : `Você é um guia espiritual atencioso que cria devocionais profundos e detalhados. 
+Escreva um devocional estruturado no formato de estudo bíblico com a seguinte estrutura:
+
+1. Um título relevante para o tema: "${theme}"
+2. Uma introdução que contextualiza o tema
+3. Um ou dois versículos bíblicos que se relacionam com o tema
+4. Uma reflexão sobre os versículos e como eles se aplicam ao tema
+5. Uma breve aplicação prática para a vida diária
+6. Uma curta oração final
+
+Importante:
+- Escreva inteiramente em português
+- A saída deve estar bem formatada
+- Certifique-se de que os versículos estejam precisos
+- Seja respeitoso e ecumênico
+- Tamanho: aproximadamente 500-800 palavras`;
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -43,97 +81,55 @@ export const generateDevotional = async (theme: string): Promise<AIResponse> => 
         messages: [
           {
             role: 'system',
-            content: `Você é um guia espiritual atencioso que cria devocionais profundos e detalhados. 
-Escreva um devocional estruturado no formato de estudo bíblico com a seguinte estrutura:
-
-TÍTULO: [Um título atrativo e relevante para o tema]
-
-[Um versículo bíblico central entre aspas, seguido pela referência]
-
-INTRODUÇÃO: [Uma introdução ao tema e ao versículo, contextualizando e apresentando o que será abordado no estudo. Aproximadamente 150 palavras.]
-
-TÓPICO I: [Subtítulo relevante]
-[Desenvolvimento do primeiro ponto principal, com aplicação bíblica e prática. Aproximadamente 200 palavras.]
-
-TÓPICO II: [Subtítulo relevante]
-[Desenvolvimento do segundo ponto principal, com aplicação bíblica e prática. Aproximadamente 200 palavras.]
-
-TÓPICO III: [Subtítulo relevante]
-[Desenvolvimento do terceiro ponto principal, com aplicação bíblica e prática. Aproximadamente 200 palavras.]
-
-[Se necessário e relevante, adicione mais tópicos seguindo o mesmo formato]
-
-CONCLUSÃO: [Uma conclusão que amarra todos os pontos abordados e faz um chamado à aplicação prática. Aproximadamente 150 palavras.]
-
-ORAÇÃO: [Uma oração final significativa relacionada ao tema estudado.]
-
-Escreva em português brasileiro. Seja profundo, reflexivo e inspirador. Inclua referências bíblicas adicionais nos tópicos para enriquecer o estudo. O conteúdo deve ser teologicamente sólido e aplicável à vida diária do leitor.`
+            content: systemPrompt
           },
           {
             role: 'user',
-            content: `Crie um devocional completo sobre: ${theme}`
-          }
+            content: `Crie um devocional sobre o tema: ${theme}. Use o tema como ponto de partida para reflexão bíblica, mas não se limite a ele. Inclua versículos relevantes e uma aplicação prática.`
+          },
         ],
         temperature: 0.7,
-        max_tokens: 2500
-      })
+        max_tokens: 1000,
+      }),
     });
 
+    if (!response.ok) {
+      console.error(`Error generating devotional: ${response.status} ${response.statusText}`);
+      throw new Error(isEnglish ? `Error processing your request: ${response.status} ${response.statusText}` : `Erro ao processar sua solicitação: ${response.status} ${response.statusText}`);
+    }
+
     const data = await response.json();
+    const content = data.choices[0].message.content;
 
-    if (data.error) {
-      throw new Error(data.error.message || 'Falha ao gerar o devocional');
-    }
+    // Extrair título e conteúdo
+    const lines = content.split('\n');
+    const title = lines[0];
 
-    if (data.choices && data.choices[0]) {
-      const devotionalContent = data.choices[0].message.content;
-
-      // Extrair o título do conteúdo gerado
-      let devotionalTitle = theme; // Default para o caso de não conseguir extrair
-      const titleMatch = devotionalContent.match(/TÍTULO:\s*(.+?)(?:\n|$)/i);
-
-      if (titleMatch && titleMatch[1]) {
-        devotionalTitle = titleMatch[1].trim();
-        // Remove o título do conteúdo para evitar duplicação
-        const cleanContent = devotionalContent.replace(/TÍTULO:\s*(.+?)(?:\n|$)/i, '');
-
-        return {
-          title: devotionalTitle,
-          content: cleanContent
-        };
-      }
-
-      // Se não conseguir extrair o título, usa o conteúdo completo
-      return {
-        title: theme,
-        content: devotionalContent
-      };
-    }
-
-    throw new Error('Nenhum conteúdo retornado pela API');
+    return {
+      title,
+      content
+    };
   } catch (error) {
-    console.error('Erro ao gerar devocional:', error);
+    console.error('Error in generateDevotional:', error);
     throw error;
   }
 };
 
 /**
- * Traduz um versículo bíblico do inglês para português no padrão da Bíblia NAA
- * @param englishVerse Array com os detalhes do versículo em inglês
- * @returns Objeto com o versículo traduzido e formatado
+ * Traduz um versículo bíblico em inglês para o português no estilo da Nova Almeida Atualizada (NAA)
+ * @param englishVerse Array com informações do versículo em inglês [livro, capítulo, versículo, texto...]
+ * @returns Versículo traduzido com informações estruturadas
  */
 export const translateVerseToNAA = async (englishVerse: string[]): Promise<TranslatedVerse> => {
-  if (!englishVerse || englishVerse.length < 6) {
+  if (!englishVerse || englishVerse.length < 3) {
+    console.error('Invalid verse format:', englishVerse);
     throw new Error('Formato de versículo inválido');
   }
 
   try {
-    const bookName = englishVerse[0];     // Nome do livro em inglês
-    const chapterNum = englishVerse[2];   // Número do capítulo
-    const verseNum = englishVerse[4];     // Número do versículo
-    const verseText = englishVerse[5];    // Texto do versículo em inglês
+    const [book, chapterStr, verseStr, ...textParts] = englishVerse;
+    const verseText = textParts.join(' ');
 
-    // Preparando o input para a requisição para a API de IA
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -159,50 +155,40 @@ Seja fiel ao texto original, mas use o português contemporâneo e formal da NAA
           {
             role: 'user',
             content: `Traduza o seguinte versículo bíblico:
-Livro: ${bookName}
-Capítulo: ${chapterNum}
-Versículo: ${verseNum}
-Texto: ${verseText}`
-          }
+Livro: ${book}
+Capítulo: ${verseStr}
+Versículo: ${textParts[0]}
+Texto: ${textParts.slice(1).join(' ')}`
+          },
         ],
         temperature: 0.3,
-        max_tokens: 500
-      })
+        max_tokens: 500,
+      }),
     });
 
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error.message || 'Falha ao traduzir o versículo');
+    if (!response.ok) {
+      throw new Error(`Erro ao traduzir versículo: ${response.status} ${response.statusText}`);
     }
 
-    if (data.choices && data.choices[0]) {
-      const translationContent = data.choices[0].message.content;
+    const data = await response.json();
+    const translationJson = data.choices[0].message.content;
 
-      // Tentando extrair o JSON da resposta
-      try {
-        const jsonMatch = translationContent.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          const translatedData = JSON.parse(jsonMatch[0]);
-          return translatedData as TranslatedVerse;
-        }
-      } catch (parseError) {
-        console.error('Erro ao processar resposta da tradução:', parseError);
+    // Parse e valide o JSON da resposta
+    try {
+      const translatedVerse = JSON.parse(translationJson);
+
+      // Validar a estrutura do objeto
+      if (!translatedVerse.book || !translatedVerse.chapter || !translatedVerse.verse || !translatedVerse.text || !translatedVerse.reference) {
+        throw new Error('Resposta de tradução incompleta');
       }
 
-      // Fallback: retornar um objeto formatado manualmente
-      return {
-        book: bookName,
-        chapter: Number(chapterNum),
-        verse: Number(verseNum),
-        text: translationContent.replace(/```json|```/g, '').trim(),
-        reference: `${bookName} ${chapterNum}:${verseNum}`
-      };
+      return translatedVerse;
+    } catch (error) {
+      console.error('Error parsing translation response:', error);
+      throw new Error('Erro ao processar tradução do versículo');
     }
-
-    throw new Error('Nenhuma tradução retornada pela API');
   } catch (error) {
-    console.error('Erro ao traduzir versículo:', error);
+    console.error('Error in translateVerseToNAA:', error);
     throw error;
   }
 }; 

@@ -197,7 +197,11 @@ export default function DevotionalResultScreen() {
                           }
                         ]}
                       >
-                        {topico.titulo}
+                        {topico.titulo === 'Reflection'
+                          ? t('devotionalResult.reflection')
+                          : topico.titulo === 'Practical Application'
+                            ? t('devotionalResult.practicalApplication')
+                            : topico.titulo}
                       </ThemedText>
                       {topico.paragraphs.map((paragraph: string, paragraphIndex: number) => (
                         <ThemedText

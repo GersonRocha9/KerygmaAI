@@ -39,7 +39,7 @@ export default function DevotionalScreen() {
   const colors = useThemeColors();
   const spacing = useThemeSpacing();
   const borderRadius = useThemeBorderRadius();
-  const { t } = useLanguage();
+  const { t, isEnglish, currentLanguage } = useLanguage();
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -53,7 +53,12 @@ export default function DevotionalScreen() {
       setLoading(true);
       setError('');
 
-      const result = await generateDevotional(data.theme.trim());
+      console.log('Submitting form with theme:', data.theme.trim());
+      console.log('Current language is English:', isEnglish);
+      console.log('Current language code:', currentLanguage);
+
+      const result = await generateDevotional(data.theme.trim(), isEnglish);
+      console.log('Received result from API:', result ? `title: ${result.title}, content length: ${result.content?.length}` : 'no result');
 
       if (result && result.title && result.content) {
         await saveDevotionalToHistory(result.title, result.content, data.theme);
@@ -161,7 +166,7 @@ export default function DevotionalScreen() {
                     {loading ? (
                       <ActivityIndicator color={colors.primary} size="small" />
                     ) : (
-                      <ThemedText style={[styles.buttonText, { color: colors.surface }]}>
+                      <ThemedText style={[styles.buttonText, { color: colors.textPrimary }]}>
                         {t('devotional.generateButton')}
                       </ThemedText>
                     )}
