@@ -5,11 +5,15 @@ on:
     branches: [ main ]
   push:
     branches: [ main ]
+    tags-ignore:
+      - 'v*'  # Ignora pushes de tags de versão
 
 jobs:
   test:
     name: Test & Lint
     runs-on: ubuntu-latest
+    # Não executa se a mensagem do commit começar com "release:"
+    if: "!startsWith(github.event.head_commit.message, 'release:')"
     steps:
       - name: 📁 Checkout code
         uses: actions/checkout@v3
