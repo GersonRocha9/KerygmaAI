@@ -1,17 +1,17 @@
-import { useThemeColors } from '@/hooks/useTheme';
-import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
-import React from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useThemeColors } from '@/hooks/useTheme'
+import { BlurView } from 'expo-blur'
+import { LinearGradient } from 'expo-linear-gradient'
+import React from 'react'
+import { Platform, StyleSheet, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 // This is a shim for web and Android where the tab bar is generally opaque.
 export default function TabBarBackground() {
-  const insets = useSafeAreaInsets();
-  const colors = useThemeColors();
+  const insets = useSafeAreaInsets()
+  const colors = useThemeColors()
 
   // Calculate extra padding for bottom safe area
-  const bottomInset = Platform.OS === 'ios' ? insets.bottom : 0;
+  const bottomInset = Platform.OS === 'ios' ? insets.bottom : 0
 
   // For iOS, use a blur effect with gradient overlay for a premium feel
   if (Platform.OS === 'ios') {
@@ -32,7 +32,7 @@ export default function TabBarBackground() {
         />
         <View style={[styles.topBorder, { backgroundColor: colors.border }]} />
       </View>
-    );
+    )
   }
 
   // For Android, use a gradient background with elevation
@@ -41,7 +41,7 @@ export default function TabBarBackground() {
       style={[
         styles.background,
         styles.androidContainer,
-        { paddingBottom: bottomInset }
+        { paddingBottom: bottomInset },
       ]}
     >
       <LinearGradient
@@ -50,13 +50,13 @@ export default function TabBarBackground() {
       />
       <View style={[styles.topBorder, { backgroundColor: colors.border }]} />
     </View>
-  );
+  )
 }
 
 // Function to calculate overflow if needed
 export function useBottomTabOverflow() {
-  const insets = useSafeAreaInsets();
-  return Platform.OS === 'ios' ? insets.bottom : 0;
+  const insets = useSafeAreaInsets()
+  return Platform.OS === 'ios' ? insets.bottom : 0
 }
 
 const styles = StyleSheet.create({
@@ -102,4 +102,4 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
-});
+})

@@ -1,20 +1,27 @@
-import { useLanguage } from '@/hooks/useLanguage';
-import { useThemeBorderRadius, useThemeColors, useThemeElevation, useThemeSpacing } from '@/hooks/useTheme';
-import React from 'react';
-import { Platform, StyleSheet, TouchableOpacity } from 'react-native';
-import { ThemedText } from './ThemedText';
-import { IconSymbol } from './ui/IconSymbol';
+import { useLanguage } from '@/hooks/useLanguage'
+import {
+  useThemeBorderRadius,
+  useThemeColors,
+  useThemeElevation,
+  useThemeSpacing,
+} from '@/hooks/useTheme'
+import React from 'react'
+import { Platform, StyleSheet, TouchableOpacity } from 'react-native'
+import { ThemedText } from './ThemedText'
+import { IconSymbol } from './ui/IconSymbol'
 
 type CreateDevotionalButtonProps = {
-  onPress: () => void;
-};
+  onPress: () => void
+}
 
-export function CreateDevotionalButton({ onPress }: CreateDevotionalButtonProps) {
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const elevation = useThemeElevation();
-  const { t } = useLanguage();
+export function CreateDevotionalButton({
+  onPress,
+}: CreateDevotionalButtonProps) {
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const elevation = useThemeElevation()
+  const { t } = useLanguage()
 
   return (
     <TouchableOpacity
@@ -58,7 +65,7 @@ export function CreateDevotionalButton({ onPress }: CreateDevotionalButtonProps)
         {t('home.createNewDevotional')}
       </ThemedText>
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -71,4 +78,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Inter-SemiBold',
   },
-}); 
+})

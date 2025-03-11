@@ -1,21 +1,26 @@
-import { useThemeBorderRadius, useThemeColors, useThemeElevation, useThemeSpacing } from '@/hooks/useTheme';
-import React from 'react';
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ThemedText } from './ThemedText';
-import { ThemedView } from './ThemedView';
-import { IconSymbol } from './ui/IconSymbol';
+import {
+  useThemeBorderRadius,
+  useThemeColors,
+  useThemeElevation,
+  useThemeSpacing,
+} from '@/hooks/useTheme'
+import React from 'react'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ThemedText } from './ThemedText'
+import { ThemedView } from './ThemedView'
+import { IconSymbol } from './ui/IconSymbol'
 
 type VerseCardProps = {
-  verse: string;
-  reference: string;
-  onShare?: () => void;
-};
+  verse: string
+  reference: string
+  onShare?: () => void
+}
 
 export function VerseCard({ verse, reference, onShare }: VerseCardProps) {
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const elevation = useThemeElevation();
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const elevation = useThemeElevation()
 
   return (
     <ThemedView
@@ -44,7 +49,10 @@ export function VerseCard({ verse, reference, onShare }: VerseCardProps) {
           {reference}
         </ThemedText>
         {onShare && (
-          <TouchableOpacity onPress={onShare} style={[styles.shareButton, { padding: spacing.xs }]}>
+          <TouchableOpacity
+            onPress={onShare}
+            style={[styles.shareButton, { padding: spacing.xs }]}
+          >
             <IconSymbol
               size={24}
               name="square.and.arrow.up"
@@ -60,7 +68,7 @@ export function VerseCard({ verse, reference, onShare }: VerseCardProps) {
         {verse}
       </ThemedText>
     </ThemedView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -87,4 +95,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'right',
   },
-}); 
+})

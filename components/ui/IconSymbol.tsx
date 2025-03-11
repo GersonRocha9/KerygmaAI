@@ -1,9 +1,14 @@
 // This file is a fallback for using MaterialIcons on Android and web.
 
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { SymbolWeight } from 'expo-symbols';
-import React from 'react';
-import { OpaqueColorValue, StyleProp, TextStyle, ViewStyle } from 'react-native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import type { SymbolWeight } from 'expo-symbols'
+import type React from 'react'
+import type {
+  OpaqueColorValue,
+  StyleProp,
+  TextStyle,
+  ViewStyle,
+} from 'react-native'
 
 // Add your SFSymbol to MaterialIcons mappings here.
 const MAPPING = {
@@ -25,9 +30,9 @@ const MAPPING = {
   'arrow.right': 'arrow-forward',
   'arrow.left': 'arrow-back',
   'trash.fill': 'delete',
-  'trash': 'delete-outline',
+  trash: 'delete-outline',
   'xmark.circle.fill': 'cancel',
-  'sparkles': 'auto-awesome',
+  sparkles: 'auto-awesome',
   'wand.and.stars': 'auto-fix-high',
   'wand.and.star': 'auto-fix-normal',
 } as Partial<
@@ -35,9 +40,9 @@ const MAPPING = {
     import('expo-symbols').SymbolViewProps['name'],
     React.ComponentProps<typeof MaterialIcons>['name']
   >
->;
+>
 
-export type IconSymbolName = keyof typeof MAPPING;
+export type IconSymbolName = keyof typeof MAPPING
 
 /**
  * An icon component that uses native SFSymbols on iOS, and MaterialIcons on Android and web. This ensures a consistent look across platforms, and optimal resource usage.
@@ -50,14 +55,21 @@ export function IconSymbol({
   color,
   style,
 }: {
-  name: IconSymbolName;
-  size?: number;
-  color: string | OpaqueColorValue;
-  style?: StyleProp<ViewStyle>;
-  weight?: SymbolWeight;
+  name: IconSymbolName
+  size?: number
+  color: string | OpaqueColorValue
+  style?: StyleProp<ViewStyle>
+  weight?: SymbolWeight
 }) {
   // Get the mapped Material icon name or use a fallback
-  const iconName = MAPPING[name] || 'help-outline'; // Add a fallback icon if mapping is missing
+  const iconName = MAPPING[name] || 'help-outline' // Add a fallback icon if mapping is missing
 
-  return <MaterialIcons color={color} size={size} name={iconName} style={style as StyleProp<TextStyle>} />;
+  return (
+    <MaterialIcons
+      color={color}
+      size={size}
+      name={iconName}
+      style={style as StyleProp<TextStyle>}
+    />
+  )
 }

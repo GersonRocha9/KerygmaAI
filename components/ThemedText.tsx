@@ -1,14 +1,14 @@
-import { useThemeColors, useThemeTypography } from '@/hooks/useTheme';
-import { StyleSheet, Text, type TextProps } from 'react-native';
+import { useThemeColors, useThemeTypography } from '@/hooks/useTheme'
+import { StyleSheet, Text, type TextProps } from 'react-native'
 
-import { useThemeColor } from '@/hooks/useThemeColor';
+import { useThemeColor } from '@/hooks/useThemeColor'
 
 export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
-  variant?: 'primary' | 'secondary' | 'tertiary';
-};
+  lightColor?: string
+  darkColor?: string
+  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link'
+  variant?: 'primary' | 'secondary' | 'tertiary'
+}
 
 export function ThemedText({
   style,
@@ -18,12 +18,14 @@ export function ThemedText({
   variant = 'primary',
   ...rest
 }: ThemedTextProps) {
-  const colors = useThemeColors();
-  const typography = useThemeTypography();
+  const colors = useThemeColors()
+  const typography = useThemeTypography()
 
   const color = variant
-    ? colors[`text${variant.charAt(0).toUpperCase() + variant.slice(1)}` as keyof typeof colors]
-    : useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+    ? colors[
+        `text${variant.charAt(0).toUpperCase() + variant.slice(1)}` as keyof typeof colors
+      ]
+    : useThemeColor({ light: lightColor, dark: darkColor }, 'text')
 
   return (
     <Text
@@ -38,7 +40,7 @@ export function ThemedText({
       ]}
       {...rest}
     />
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -67,4 +69,4 @@ const styles = StyleSheet.create({
     color: '#0a7ea4',
     fontFamily: 'Inter-Regular',
   },
-});
+})

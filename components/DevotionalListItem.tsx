@@ -1,22 +1,32 @@
-import { useThemeBorderRadius, useThemeColors, useThemeElevation, useThemeSpacing } from '@/hooks/useTheme';
-import React from 'react';
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { ThemedText } from './ThemedText';
-import { ThemedView } from './ThemedView';
-import { IconSymbol } from './ui/IconSymbol';
+import {
+  useThemeBorderRadius,
+  useThemeColors,
+  useThemeElevation,
+  useThemeSpacing,
+} from '@/hooks/useTheme'
+import React from 'react'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ThemedText } from './ThemedText'
+import { ThemedView } from './ThemedView'
+import { IconSymbol } from './ui/IconSymbol'
 
 type DevotionalListItemProps = {
-  title: string;
-  theme: string;
-  date: string;
-  onPress: () => void;
-};
+  title: string
+  theme: string
+  date: string
+  onPress: () => void
+}
 
-export function DevotionalListItem({ title, theme, date, onPress }: DevotionalListItemProps) {
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const elevation = useThemeElevation();
+export function DevotionalListItem({
+  title,
+  theme,
+  date,
+  onPress,
+}: DevotionalListItemProps) {
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const elevation = useThemeElevation()
 
   return (
     <TouchableOpacity onPress={onPress} activeOpacity={0.7}>
@@ -68,7 +78,7 @@ export function DevotionalListItem({ title, theme, date, onPress }: DevotionalLi
         />
       </ThemedView>
     </TouchableOpacity>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -93,4 +103,4 @@ const styles = StyleSheet.create({
   icon: {
     alignSelf: 'center',
   },
-}); 
+})
