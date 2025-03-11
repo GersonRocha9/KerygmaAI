@@ -1,54 +1,57 @@
-import { Share } from 'react-native';
-import { shareDevotional } from '../../services/shareService';
+import { Share } from 'react-native'
+import { shareDevotional } from '../../services/shareService'
 
 describe('shareService', () => {
-  let shareSpy: jest.SpyInstance;
+  let shareSpy: jest.SpyInstance
 
   beforeEach(() => {
-    shareSpy = jest.spyOn(Share, 'share').mockResolvedValue({ action: 'sharedAction', activityType: 'com.apple.share' });
-  });
+    shareSpy = jest.spyOn(Share, 'share').mockResolvedValue({
+      action: 'sharedAction',
+      activityType: 'com.apple.share',
+    })
+  })
 
   afterEach(() => {
-    shareSpy.mockRestore();
-  });
+    shareSpy.mockRestore()
+  })
 
   describe('shareDevotional', () => {
     it('deve compartilhar um devocional com título fornecido', async () => {
-      const content = 'Conteúdo do devocional para compartilhar.';
-      const title = 'Título do Devocional';
+      const content = 'Conteúdo do devocional para compartilhar.'
+      const title = 'Título do Devocional'
 
-      await shareDevotional(content, title);
+      await shareDevotional(content, title)
 
       expect(shareSpy).toHaveBeenCalledWith({
         message: content,
         title: `Devocional: ${title}`,
-      });
-    });
+      })
+    })
 
     it('deve compartilhar um devocional sem título fornecido', async () => {
-      const content = 'Conteúdo do devocional para compartilhar.';
+      const content = 'Conteúdo do devocional para compartilhar.'
 
-      await shareDevotional(content);
+      await shareDevotional(content)
 
       expect(shareSpy).toHaveBeenCalledWith({
         message: content,
         title: 'Devocional Diário',
-      });
-    });
+      })
+    })
 
     it('não deve compartilhar quando o conteúdo estiver vazio', async () => {
-      await shareDevotional('');
+      await shareDevotional('')
 
-      expect(shareSpy).not.toHaveBeenCalled();
-    });
+      expect(shareSpy).not.toHaveBeenCalled()
+    })
 
     it('deve lidar com erros ao compartilhar', async () => {
-      const error = new Error('Erro ao compartilhar');
-      shareSpy.mockRejectedValueOnce(error);
+      const error = new Error('Erro ao compartilhar')
+      shareSpy.mockRejectedValueOnce(error)
 
-      await shareDevotional('Conteúdo');
+      await shareDevotional('Conteúdo')
 
-      expect(shareSpy).toHaveBeenCalled();
-    });
-  });
-}); 
+      expect(shareSpy).toHaveBeenCalled()
+    })
+  })
+})
