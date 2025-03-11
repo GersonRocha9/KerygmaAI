@@ -1,23 +1,23 @@
-import { useLanguage } from '@/hooks/useLanguage';
-import { VerseOfTheDay } from '@/services/verseService';
-import { useQuery } from '@tanstack/react-query';
+import { useLanguage } from '@/hooks/useLanguage'
+import type { VerseOfTheDay } from '@/services/verseService'
+import { useQuery } from '@tanstack/react-query'
 
 // Importando os versículos mockados
-import versiculosPT from '@/i18n/versiculos-pt.json';
-import versiculosEN from '@/i18n/versiculos.json';
+import versiculosPT from '@/i18n/versiculos-pt.json'
+import versiculosEN from '@/i18n/versiculos.json'
 
 // Definindo interfaces para nossos versículos
 interface VersiculoMock {
-  verse: string;
-  reference: string;
-  id: string;
+  verse: string
+  reference: string
+  id: string
 }
 
 // Interface para versículo traduzido, adaptada do projeto
 export interface TranslatedVerse {
-  text: string;
-  reference: string;
-  translation: string;
+  text: string
+  reference: string
+  translation: string
 }
 
 /**
@@ -25,12 +25,12 @@ export interface TranslatedVerse {
  * @returns A data atual formatada
  */
 export const useCurrentDate = (): string => {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');
-  const day = String(now.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = String(now.getMonth() + 1).padStart(2, '0')
+  const day = String(now.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
 
 /**
  * Função para obter um versículo aleatório
@@ -39,78 +39,78 @@ export const useCurrentDate = (): string => {
 const getRandomVerseIndex = (): number => {
   // Usamos a data atual como seed para o número aleatório
   // para garantir que o mesmo versículo seja exibido durante todo o dia
-  const date = new Date();
-  const seed = date.getDate() + (date.getMonth() + 1) * 31;
+  const date = new Date()
+  const seed = date.getDate() + (date.getMonth() + 1) * 31
 
   // Usamos a data como seed para obter o mesmo versículo durante o dia inteiro
-  return seed % versiculosEN.length;
-};
+  return seed % versiculosEN.length
+}
 
 /**
  * Adaptando o versículo para o formato esperado pela aplicação
  */
 const adaptVerse = (verse: VersiculoMock): VerseOfTheDay => {
   // Convertendo para o formato de array que a aplicação espera
-  return [verse.verse, verse.reference, verse.id];
-};
+  return [verse.verse, verse.reference, verse.id]
+}
 
 /**
  * Hook para obter um versículo do dia usando o idioma atual do app
  * @returns O versículo do dia no idioma atual do app
  */
 export const useVerseOfTheDay = () => {
-  const currentDate = useCurrentDate();
-  const { isEnglish } = useLanguage();
+  const currentDate = useCurrentDate()
+  const { isEnglish } = useLanguage()
 
   return useQuery<VerseOfTheDay>({
     queryKey: ['verseOfTheDay', currentDate, isEnglish],
     queryFn: () => {
       // Obter o índice do versículo baseado na data atual
-      const verseIndex = getRandomVerseIndex();
+      const verseIndex = getRandomVerseIndex()
 
       // Selecionar o versículo baseado no idioma atual
       const verseData = isEnglish
         ? versiculosEN[verseIndex]
-        : versiculosPT[verseIndex];
+        : versiculosPT[verseIndex]
 
       // Retornar no formato esperado pelo app
-      return adaptVerse(verseData);
+      return adaptVerse(verseData)
     },
     staleTime: 24 * 60 * 60 * 1000, // 24 horas
     gcTime: 24 * 60 * 60 * 1000, // 24 horas
-    retry: 1
-  });
-};
+    retry: 1,
+  })
+}
 
 /**
  * Hook personalizado para manter compatibilidade com outras partes do app
  * que possam estar usando este hook, agora é apenas um wrapper do useVerseOfTheDay
  * que sempre retorna um versículo no idioma atual do app
- * 
+ *
  * @returns O resultado da query com o versículo no idioma atual
  */
 export const useTranslatedVerseOfTheDay = () => {
-  const currentDate = useCurrentDate();
-  const verseQuery = useVerseOfTheDay();
-  const { isEnglish } = useLanguage();
+  const currentDate = useCurrentDate()
+  const verseQuery = useVerseOfTheDay()
+  const { isEnglish } = useLanguage()
 
   return useQuery<TranslatedVerse>({
     queryKey: ['translatedVerseOfTheDay', currentDate, isEnglish],
     queryFn: () => {
       if (!verseQuery.data || verseQuery.data.length < 3) {
-        throw new Error('Versículo não disponível');
+        throw new Error('Versículo não disponível')
       }
 
       // Retornar o versículo no formato esperado
       return {
         text: verseQuery.data[0],
         reference: verseQuery.data[1],
-        translation: isEnglish ? 'NIV' : 'NAA' // Tradução apropriada conforme o idioma
-      };
+        translation: isEnglish ? 'NIV' : 'NAA', // Tradução apropriada conforme o idioma
+      }
     },
     enabled: !!verseQuery.data, // Só executa quando o versículo estiver disponível
     staleTime: 24 * 60 * 60 * 1000, // 24 horas
     gcTime: 24 * 60 * 60 * 1000, // 24 horas
-    retry: 1
-  });
-}; 
+    retry: 1,
+  })
+}
