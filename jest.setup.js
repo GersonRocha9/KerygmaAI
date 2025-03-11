@@ -1,8 +1,8 @@
 // Import matchers from testing library
-import '@testing-library/react-native';
+import '@testing-library/react-native'
 
 // Suprimir logs de console.error durante testes para evitar poluição na saída
-const originalConsoleError = console.error;
+const originalConsoleError = console.error
 beforeAll(() => {
   console.error = (...args) => {
     if (
@@ -12,21 +12,21 @@ beforeAll(() => {
         args[0].includes('Erro ao buscar versículo do dia'))
     ) {
       // Silencia os erros específicos que são esperados durante os testes
-      return;
+      return
     }
-    originalConsoleError(...args);
-  };
-});
+    originalConsoleError(...args)
+  }
+})
 
 afterAll(() => {
-  console.error = originalConsoleError;
-});
+  console.error = originalConsoleError
+})
 
 // Mock expo-font
-jest.mock('expo-font');
+jest.mock('expo-font')
 
 // Mock expo-asset
-jest.mock('expo-asset');
+jest.mock('expo-asset')
 
 // Mock do AsyncStorage para testes
 jest.mock('@react-native-async-storage/async-storage', () => ({
@@ -38,33 +38,33 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   multiSet: jest.fn(() => Promise.resolve(null)),
   multiRemove: jest.fn(() => Promise.resolve(null)),
   clear: jest.fn(() => Promise.resolve(null)),
-}));
+}))
 
 // Mock react-native-reanimated
 jest.mock('react-native-reanimated', () => {
-  const Reanimated = require('react-native-reanimated/mock');
+  const Reanimated = require('react-native-reanimated/mock')
   // The mock for `call` immediately calls the callback which is incorrect
   // So we override it with a no-op
-  Reanimated.default.call = () => { };
-  return Reanimated;
-});
+  Reanimated.default.call = () => {}
+  return Reanimated
+})
 
 // Mock useColorScheme
 jest.mock('react-native', () => {
-  const RN = jest.requireActual('react-native');
-  RN.useColorScheme = () => 'light';
-  return RN;
-});
+  const RN = jest.requireActual('react-native')
+  RN.useColorScheme = () => 'light'
+  return RN
+})
 
 // Mock the safe area context
 jest.mock('react-native-safe-area-context', () => {
-  const inset = { top: 0, right: 0, bottom: 0, left: 0 };
+  const inset = { top: 0, right: 0, bottom: 0, left: 0 }
   return {
     SafeAreaProvider: jest.fn(({ children }) => children),
     SafeAreaView: jest.fn(({ children }) => children),
     useSafeAreaInsets: jest.fn(() => inset),
-  };
-});
+  }
+})
 
 // Mock expo-router
 jest.mock('expo-router', () => ({
@@ -81,15 +81,15 @@ jest.mock('expo-router', () => ({
   Stack: {
     Screen: jest.fn(({ children }) => children),
   },
-}));
+}))
 
 // Mock @react-navigation/native
 jest.mock('@react-navigation/native', () => ({
-  useFocusEffect: jest.fn((callback) => {
+  useFocusEffect: jest.fn(callback => {
     // Executamos o callback imediatamente para simular o efeito
-    callback();
+    callback()
   }),
-}));
+}))
 
 // Mock useTheme hooks
 jest.mock('@/hooks/useTheme', () => ({
@@ -217,37 +217,41 @@ jest.mock('@/hooks/useTheme', () => ({
       xxl: 36,
     },
   })),
-}));
+}))
 
 // Mock useThemeColor
 jest.mock('@/hooks/useThemeColor', () => ({
   useThemeColor: jest.fn((props, colorName) => {
-    if (props?.light) return props.light;
-    if (props?.dark) return props.dark;
-    return '#000000';
+    if (props?.light) return props.light
+    if (props?.dark) return props.dark
+    return '#000000'
   }),
-}));
+}))
 
 // Silence the warning: Animated: `useNativeDriver` is not supported because the native animated module is missing
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper', () => {
-  return {
-    shouldUseNativeDriver: () => false,
-  };
-}, { virtual: true });
+jest.mock(
+  'react-native/Libraries/Animated/NativeAnimatedHelper',
+  () => {
+    return {
+      shouldUseNativeDriver: () => false,
+    }
+  },
+  { virtual: true }
+)
 
 // Mock do IconSymbol para retornar um componente React válido
 jest.mock('@/components/ui/IconSymbol', () => {
-  const React = require('react');
+  const React = require('react')
   return {
     IconSymbol: ({ size, name, color, style }) => {
       return React.createElement('View', {
         testID: `icon-${name}`,
         style: [{ width: size, height: size }, style],
         children: React.createElement('Text', { style: { color } }, name),
-      });
-    }
-  };
-});
+      })
+    },
+  }
+})
 
 // Avoid error about fontFamily being a required style prop
 jest.mock('@/constants/Fonts', () => ({
@@ -273,4 +277,4 @@ jest.mock('@/constants/Fonts', () => ({
     xl: 32,
     xxl: 36,
   },
-})); 
+}))

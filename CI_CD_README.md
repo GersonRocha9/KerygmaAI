@@ -59,4 +59,4 @@ No arquivo `eas.json`, configuramos três perfis de build:
 4. **Entrega**:
    - Após o merge, builds serão gerados automaticamente
    - Uma atualização OTA será publicada automaticamente
-   - Testadores poderão acessar a nova versão 
+   - Testadores poderão acessar a nova versão

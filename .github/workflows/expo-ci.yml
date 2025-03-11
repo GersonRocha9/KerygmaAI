@@ -61,7 +61,7 @@ jobs:
 #          expo-version: latest
 #          eas-version: latest
 #          token: ${{ secrets.EXPO_TOKEN }}
-#      
+#
 #      - name: 🔧 Setup Node.js
 #        uses: actions/setup-node@v3
 #        with:
@@ -92,7 +92,7 @@ jobs:
 #          expo-version: latest
 #          eas-version: latest
 #          token: ${{ secrets.EXPO_TOKEN }}
-#      
+#
 #      - name: 🔧 Setup Node.js
 #        uses: actions/setup-node@v3
 #        with:
@@ -103,4 +103,4 @@ jobs:
 #        run: npm ci
 #
 #      - name: 🚀 Publish update
-#        run: npx eas update --auto --non-interactive 
+#        run: npx eas update --auto --non-interactive
