@@ -1,5 +1,5 @@
-import { Colors } from './Colors';
-import { Fonts, FontSizes, LineHeights } from './Fonts';
+import { Colors } from './Colors'
+import { FontSizes, Fonts, LineHeights } from './Fonts'
 
 export const theme = {
   light: {
@@ -100,11 +100,11 @@ export const theme = {
       lineHeights: LineHeights,
     },
   },
-} as const;
+} as const
 
-export type Theme = typeof theme.light;
-export type ThemeColors = Theme['colors'];
-export type ThemeSpacing = Theme['spacing'];
-export type ThemeBorderRadius = Theme['borderRadius'];
-export type ThemeElevation = Theme['elevation'];
-export type ThemeTypography = Theme['typography']; 
+export type Theme = typeof theme.light
+export type ThemeColors = Theme['colors']
+export type ThemeSpacing = Theme['spacing']
+export type ThemeBorderRadius = Theme['borderRadius']
+export type ThemeElevation = Theme['elevation']
+export type ThemeTypography = Theme['typography']

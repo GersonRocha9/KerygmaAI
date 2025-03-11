@@ -1,45 +1,55 @@
-import { DevotionalListItem } from '@/components/DevotionalListItem';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { useLanguage } from '@/hooks/useLanguage';
-import { useThemeBorderRadius, useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
-import { clearDevotionalHistory, DevotionalHistory, loadDevotionalHistory } from '@/services/devotionalService';
-import { Stack, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import { DevotionalListItem } from '@/components/DevotionalListItem'
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import { IconSymbol } from '@/components/ui/IconSymbol'
+import { useLanguage } from '@/hooks/useLanguage'
+import {
+  useThemeBorderRadius,
+  useThemeColors,
+  useThemeSpacing,
+} from '@/hooks/useTheme'
+import {
+  type DevotionalHistory,
+  clearDevotionalHistory,
+  loadDevotionalHistory,
+} from '@/services/devotionalService'
+import { Stack, useRouter } from 'expo-router'
+import React, { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  View
-} from 'react-native';
+  View,
+} from 'react-native'
 
 export default function HistoryScreen() {
-  const router = useRouter();
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const [loading, setLoading] = useState(true);
-  const [devotionalHistory, setDevotionalHistory] = useState<DevotionalHistory[]>([]);
-  const { t } = useLanguage();
+  const router = useRouter()
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const [loading, setLoading] = useState(true)
+  const [devotionalHistory, setDevotionalHistory] = useState<
+    DevotionalHistory[]
+  >([])
+  const { t } = useLanguage()
 
   useEffect(() => {
-    loadHistory();
-  }, []);
+    loadHistory()
+  }, [])
 
   const loadHistory = async () => {
     try {
-      setLoading(true);
-      const history = await loadDevotionalHistory();
-      setDevotionalHistory(history);
+      setLoading(true)
+      const history = await loadDevotionalHistory()
+      setDevotionalHistory(history)
     } catch (error) {
-      console.error("Erro ao carregar histórico de devocionais:", error);
+      console.error('Erro ao carregar histórico de devocionais:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   const openDevotionalResult = (item: DevotionalHistory) => {
     router.push({
@@ -48,43 +58,39 @@ export default function HistoryScreen() {
         title: item.title,
         content: item.content,
         theme: item.theme,
-        fromHistory: 'true'
-      }
-    });
-  };
+        fromHistory: 'true',
+      },
+    })
+  }
 
   const handleClearHistory = () => {
-    Alert.alert(
-      t('history.clearHistory'),
-      t('history.clearConfirmation'),
-      [
-        {
-          text: t('common.cancel'),
-          style: "cancel"
-        },
-        {
-          text: t('common.clear'),
-          style: "destructive",
-          onPress: async () => {
-            try {
-              setLoading(true);
-              const success = await clearDevotionalHistory();
-              if (success) {
-                setDevotionalHistory([]);
-              } else {
-                Alert.alert(t('common.error'), t('history.clearError'));
-              }
-            } catch (error) {
-              console.error("Erro ao limpar histórico:", error);
-              Alert.alert(t('common.error'), t('history.errorMessage'));
-            } finally {
-              setLoading(false);
+    Alert.alert(t('history.clearHistory'), t('history.clearConfirmation'), [
+      {
+        text: t('common.cancel'),
+        style: 'cancel',
+      },
+      {
+        text: t('common.clear'),
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            setLoading(true)
+            const success = await clearDevotionalHistory()
+            if (success) {
+              setDevotionalHistory([])
+            } else {
+              Alert.alert(t('common.error'), t('history.clearError'))
             }
+          } catch (error) {
+            console.error('Erro ao limpar histórico:', error)
+            Alert.alert(t('common.error'), t('history.errorMessage'))
+          } finally {
+            setLoading(false)
           }
-        }
-      ]
-    );
-  };
+        },
+      },
+    ])
+  }
 
   return (
     <>
@@ -101,7 +107,9 @@ export default function HistoryScreen() {
         }}
       />
 
-      <ScrollView contentContainerStyle={[styles.scrollContent, { padding: spacing.md }]}>
+      <ScrollView
+        contentContainerStyle={[styles.scrollContent, { padding: spacing.md }]}
+      >
         <View style={[styles.headerContainer, { marginBottom: spacing.md }]}>
           <View style={styles.titleContainer}>
             <IconSymbol
@@ -119,20 +127,20 @@ export default function HistoryScreen() {
               style={{ padding: spacing.sm }}
               onPress={handleClearHistory}
             >
-              <IconSymbol
-                size={22}
-                name="trash.fill"
-                color={colors.error}
-              />
+              <IconSymbol size={22} name="trash.fill" color={colors.error} />
             </TouchableOpacity>
           )}
         </View>
 
         {loading ? (
-          <ActivityIndicator size="large" color={colors.primary} style={{ marginTop: spacing.xl }} />
+          <ActivityIndicator
+            size="large"
+            color={colors.primary}
+            style={{ marginTop: spacing.xl }}
+          />
         ) : devotionalHistory.length > 0 ? (
           <View style={styles.historyList}>
-            {devotionalHistory.map((item) => (
+            {devotionalHistory.map(item => (
               <DevotionalListItem
                 key={item.id}
                 title={item.title}
@@ -151,7 +159,7 @@ export default function HistoryScreen() {
                 padding: spacing.xl,
                 marginTop: spacing.xl,
                 borderRadius: borderRadius.lg,
-              }
+              },
             ]}
           >
             <IconSymbol
@@ -173,7 +181,7 @@ export default function HistoryScreen() {
         )}
       </ScrollView>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -205,4 +213,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     textAlign: 'center',
   },
-}); 
+})

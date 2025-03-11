@@ -1,17 +1,17 @@
-import { Stack, useRouter } from 'expo-router';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Stack, useRouter } from 'expo-router'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import React from 'react';
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import { IconSymbol } from '@/components/ui/IconSymbol'
+import React from 'react'
 
 export default function NotFoundScreen() {
-  const router = useRouter();
+  const router = useRouter()
 
   const goToHome = () => {
-    router.replace('/');
-  };
+    router.replace('/')
+  }
 
   return (
     <>
@@ -28,14 +28,12 @@ export default function NotFoundScreen() {
       />
       <ThemedView style={styles.container}>
         <View style={styles.iconContainer}>
-          <IconSymbol
-            name="book.closed.fill"
-            size={80}
-            color="#BDBDBD"
-          />
+          <IconSymbol name="book.closed.fill" size={80} color="#BDBDBD" />
         </View>
 
-        <ThemedText style={styles.title}>Oops! Página não encontrada</ThemedText>
+        <ThemedText style={styles.title}>
+          Oops! Página não encontrada
+        </ThemedText>
         <ThemedText style={styles.message}>
           A página que você está procurando não existe ou foi movida.
         </ThemedText>
@@ -59,7 +57,7 @@ export default function NotFoundScreen() {
         </ThemedText>
       </ThemedView>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -72,9 +70,9 @@ const styles = StyleSheet.create({
     ...Platform.select({
       android: {
         paddingTop: 8,
-        paddingBottom: 8
-      }
-    })
+        paddingBottom: 8,
+      },
+    }),
   },
   iconContainer: {
     position: 'relative',
@@ -128,4 +126,4 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: '80%',
   },
-});
+})

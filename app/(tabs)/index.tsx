@@ -1,50 +1,62 @@
-import { CreateDevotionalButton } from '@/components/CreateDevotionalButton';
-import { DevotionalListItem } from '@/components/DevotionalListItem';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { VerseCard } from '@/components/VerseCard';
-import { useTranslatedVerseOfTheDay } from '@/hooks/queries/useVerseOfTheDay';
-import { useLanguage } from '@/hooks/useLanguage';
-import { useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
-import { loadRecentDevotionals, type DevotionalHistory } from '@/services/devotionalService';
-import { shareVerse } from '@/services/shareService';
-import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { CreateDevotionalButton } from '@/components/CreateDevotionalButton'
+import { DevotionalListItem } from '@/components/DevotionalListItem'
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import { VerseCard } from '@/components/VerseCard'
+import { IconSymbol } from '@/components/ui/IconSymbol'
+import { useTranslatedVerseOfTheDay } from '@/hooks/queries/useVerseOfTheDay'
+import { useLanguage } from '@/hooks/useLanguage'
+import { useThemeColors, useThemeSpacing } from '@/hooks/useTheme'
+import {
+  type DevotionalHistory,
+  loadRecentDevotionals,
+} from '@/services/devotionalService'
+import { shareVerse } from '@/services/shareService'
+import { useFocusEffect, useRouter } from 'expo-router'
+import React, { useCallback, useState } from 'react'
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function HomeScreen() {
-  const router = useRouter();
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const { t, toggleLanguage, isEnglish } = useLanguage();
-  const [devotionalHistory, setDevotionalHistory] = useState<DevotionalHistory[]>([]);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter()
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const { t, toggleLanguage, isEnglish } = useLanguage()
+  const [devotionalHistory, setDevotionalHistory] = useState<
+    DevotionalHistory[]
+  >([])
+  const [loading, setLoading] = useState(true)
 
   const handleCreateDevotional = () => {
-    router.push('/devotional');
-  };
+    router.push('/devotional')
+  }
 
-  const { data: translatedVerse, isLoading: verseLoading } = useTranslatedVerseOfTheDay();
+  const { data: translatedVerse, isLoading: verseLoading } =
+    useTranslatedVerseOfTheDay()
 
   const loadDevotionalHistory = async () => {
     try {
-      setLoading(true);
-      const recentDevotionals = await loadRecentDevotionals(3);
-      setDevotionalHistory(recentDevotionals);
+      setLoading(true)
+      const recentDevotionals = await loadRecentDevotionals(3)
+      setDevotionalHistory(recentDevotionals)
     } catch (error) {
-      console.error("Erro ao carregar histórico de devocionais:", error);
+      console.error('Erro ao carregar histórico de devocionais:', error)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   useFocusEffect(
     useCallback(() => {
-      loadDevotionalHistory();
+      loadDevotionalHistory()
     }, [])
-  );
+  )
 
   const handleOpenDevotional = (item: DevotionalHistory) => {
     router.push({
@@ -53,24 +65,27 @@ export default function HomeScreen() {
         title: item.title,
         content: item.content,
         theme: item.theme,
-        fromHistory: 'true'
-      }
-    });
-  };
+        fromHistory: 'true',
+      },
+    })
+  }
 
   const handleViewAll = () => {
-    router.push('/history');
-  };
+    router.push('/history')
+  }
 
   const handleShareVerse = async () => {
     if (translatedVerse) {
-      await shareVerse(translatedVerse.text, translatedVerse.reference);
+      await shareVerse(translatedVerse.text, translatedVerse.reference)
     }
-  };
+  }
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollContent} contentContainerStyle={{ padding: spacing.md }}>
+      <ScrollView
+        style={styles.scrollContent}
+        contentContainerStyle={{ padding: spacing.md }}
+      >
         <View style={[styles.header, { marginBottom: spacing.md }]}>
           <View style={styles.headerLeft}>
             <IconSymbol
@@ -128,7 +143,10 @@ export default function HomeScreen() {
                 <>
                   <ThemedText
                     variant="primary"
-                    style={[styles.viewAllText, { color: colors.primary, marginRight: spacing.xs }]}
+                    style={[
+                      styles.viewAllText,
+                      { color: colors.primary, marginRight: spacing.xs },
+                    ]}
                   >
                     {t('home.viewAll')}
                   </ThemedText>
@@ -146,7 +164,7 @@ export default function HomeScreen() {
             <ActivityIndicator size="large" color={colors.primary} />
           ) : devotionalHistory.length > 0 ? (
             <View style={styles.historyList}>
-              {devotionalHistory.map((item) => (
+              {devotionalHistory.map(item => (
                 <DevotionalListItem
                   key={item.id}
                   title={item.title}
@@ -190,7 +208,9 @@ export default function HomeScreen() {
           </View>
         </ThemedView>
 
-        <View style={[styles.disclaimerContainer, { marginBottom: spacing.xl }]}>
+        <View
+          style={[styles.disclaimerContainer, { marginBottom: spacing.xl }]}
+        >
           <IconSymbol
             size={20}
             name="info.circle.fill"
@@ -203,7 +223,7 @@ export default function HomeScreen() {
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -285,4 +305,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: 'Inter-Medium',
   },
-});
+})

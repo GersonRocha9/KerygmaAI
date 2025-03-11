@@ -3,7 +3,7 @@ export const Fonts = {
   medium: 'Inter-Medium',
   semiBold: 'Inter-SemiBold',
   bold: 'Inter-Bold',
-};
+}
 
 export const FontSizes = {
   small: 12,
@@ -12,7 +12,7 @@ export const FontSizes = {
   large: 20,
   xlarge: 24,
   xxlarge: 32,
-};
+}
 
 export const LineHeights = {
   small: 18,
@@ -21,7 +21,7 @@ export const LineHeights = {
   large: 30,
   xlarge: 32,
   xxlarge: 38,
-};
+}
 
 export const TextStyles = {
   paragraph: {
@@ -49,4 +49,4 @@ export const TextStyles = {
     fontSize: FontSizes.small,
     lineHeight: LineHeights.small,
   },
-}; 
+}

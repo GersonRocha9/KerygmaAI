@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'expo-router'
+import React, { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import {
   ActivityIndicator,
   Keyboard,
@@ -11,57 +11,71 @@ import {
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
-  View
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import * as z from 'zod';
+  View,
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import * as z from 'zod'
 
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import { useLanguage } from '@/hooks/useLanguage';
-import { useThemeBorderRadius, useThemeColors, useThemeSpacing } from '@/hooks/useTheme';
-import { generateDevotional } from '@/services/aiService';
-import { saveDevotionalToHistory } from '@/services/devotionalService';
+import { ThemedText } from '@/components/ThemedText'
+import { ThemedView } from '@/components/ThemedView'
+import { IconSymbol } from '@/components/ui/IconSymbol'
+import { useLanguage } from '@/hooks/useLanguage'
+import {
+  useThemeBorderRadius,
+  useThemeColors,
+  useThemeSpacing,
+} from '@/hooks/useTheme'
+import { generateDevotional } from '@/services/aiService'
+import { saveDevotionalToHistory } from '@/services/devotionalService'
 
 // Definindo o schema de validação com zod
 const formSchema = z.object({
-  theme: z.string().min(1, 'Por favor, digite um tema para o devocional')
-});
+  theme: z.string().min(1, 'Por favor, digite um tema para o devocional'),
+})
 
 // Tipo derivado do schema para TypeScript
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.infer<typeof formSchema>
 
 export default function DevotionalScreen() {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const { t, isEnglish, currentLanguage } = useLanguage();
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const router = useRouter()
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const { t, isEnglish, currentLanguage } = useLanguage()
 
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      theme: ''
-    }
-  });
+      theme: '',
+    },
+  })
 
   const onSubmit = async (data: FormData) => {
     try {
-      setLoading(true);
-      setError('');
+      setLoading(true)
+      setError('')
 
-      console.log('Submitting form with theme:', data.theme.trim());
-      console.log('Current language is English:', isEnglish);
-      console.log('Current language code:', currentLanguage);
+      console.log('Submitting form with theme:', data.theme.trim())
+      console.log('Current language is English:', isEnglish)
+      console.log('Current language code:', currentLanguage)
 
-      const result = await generateDevotional(data.theme.trim(), isEnglish);
-      console.log('Received result from API:', result ? `title: ${result.title}, content length: ${result.content?.length}` : 'no result');
+      const result = await generateDevotional(data.theme.trim(), isEnglish)
+      console.log(
+        'Received result from API:',
+        result
+          ? `title: ${result.title}, content length: ${result.content?.length}`
+          : 'no result'
+      )
 
-      if (result && result.title && result.content) {
-        await saveDevotionalToHistory(result.title, result.content, data.theme);
+      if (result?.title && result.content) {
+        await saveDevotionalToHistory(result.title, result.content, data.theme)
 
         router.push({
           pathname: '/devotional-result',
@@ -69,21 +83,21 @@ export default function DevotionalScreen() {
             content: result.content,
             title: result.title,
             theme: data.theme,
-            fromHistory: 'true'
-          }
-        });
+            fromHistory: 'true',
+          },
+        })
 
-        reset();
+        reset()
       } else {
-        throw new Error(t('devotional.noContentError'));
+        throw new Error(t('devotional.noContentError'))
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('devotional.apiError'));
-      console.error('Erro ao gerar devocional:', err);
+      setError(err instanceof Error ? err.message : t('devotional.apiError'))
+      console.error('Erro ao gerar devocional:', err)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -104,7 +118,13 @@ export default function DevotionalScreen() {
             </ThemedText>
           </View>
 
-          <ScrollView style={styles.content} contentContainerStyle={[styles.scrollContent, { padding: spacing.md }]}>
+          <ScrollView
+            style={styles.content}
+            contentContainerStyle={[
+              styles.scrollContent,
+              { padding: spacing.md },
+            ]}
+          >
             <ThemedView
               variant="cardVariant"
               style={[
@@ -112,7 +132,7 @@ export default function DevotionalScreen() {
                 {
                   borderRadius: borderRadius.lg,
                   padding: spacing.md,
-                }
+                },
               ]}
             >
               <ThemedText variant="primary" style={styles.label}>
@@ -128,10 +148,12 @@ export default function DevotionalScreen() {
                       styles.input,
                       {
                         backgroundColor: colors.surface,
-                        borderColor: errors.theme ? colors.error : colors.border,
+                        borderColor: errors.theme
+                          ? colors.error
+                          : colors.border,
                         borderRadius: borderRadius.md,
                         color: colors.textPrimary,
-                      }
+                      },
                     ]}
                     placeholder={t('devotional.themePlaceholder')}
                     placeholderTextColor={colors.textTertiary}
@@ -146,27 +168,39 @@ export default function DevotionalScreen() {
               />
 
               {errors.theme && (
-                <ThemedText style={[styles.errorMessage, { color: colors.error }]}>
+                <ThemedText
+                  style={[styles.errorMessage, { color: colors.error }]}
+                >
                   {t('devotional.themeError')}
                 </ThemedText>
               )}
 
               <View style={[styles.buttonContainer, { marginTop: spacing.md }]}>
-                <TouchableWithoutFeedback onPress={handleSubmit(onSubmit)} disabled={loading}>
+                <TouchableWithoutFeedback
+                  onPress={handleSubmit(onSubmit)}
+                  disabled={loading}
+                >
                   <ThemedView
                     style={[
                       styles.button,
                       {
-                        backgroundColor: loading ? colors.surfaceVariant : colors.primary,
+                        backgroundColor: loading
+                          ? colors.surfaceVariant
+                          : colors.primary,
                         borderRadius: borderRadius.md,
                         padding: spacing.md,
-                      }
+                      },
                     ]}
                   >
                     {loading ? (
                       <ActivityIndicator color={colors.primary} size="small" />
                     ) : (
-                      <ThemedText style={[styles.buttonText, { color: colors.textPrimary }]}>
+                      <ThemedText
+                        style={[
+                          styles.buttonText,
+                          { color: colors.textPrimary },
+                        ]}
+                      >
                         {t('devotional.generateButton')}
                       </ThemedText>
                     )}
@@ -182,9 +216,9 @@ export default function DevotionalScreen() {
                     marginTop: spacing.md,
                     padding: spacing.sm,
                     borderRadius: borderRadius.md,
-                    backgroundColor: colors.info + '10',
+                    backgroundColor: `${colors.info}10`,
                     borderLeftColor: colors.info,
-                  }
+                  },
                 ]}
               >
                 <IconSymbol
@@ -199,7 +233,12 @@ export default function DevotionalScreen() {
               </View>
 
               {error ? (
-                <ThemedText style={[styles.errorText, { color: colors.error, marginTop: spacing.sm }]}>
+                <ThemedText
+                  style={[
+                    styles.errorText,
+                    { color: colors.error, marginTop: spacing.sm },
+                  ]}
+                >
                   {error}
                 </ThemedText>
               ) : null}
@@ -213,7 +252,7 @@ export default function DevotionalScreen() {
                   borderRadius: borderRadius.lg,
                   padding: spacing.md,
                   marginTop: spacing.md,
-                }
+                },
               ]}
             >
               <IconSymbol
@@ -230,7 +269,7 @@ export default function DevotionalScreen() {
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -306,4 +345,4 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontFamily: 'Inter-Regular',
   },
-});
+})

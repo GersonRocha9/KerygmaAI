@@ -1,16 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as Localization from 'expo-localization';
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import * as Localization from 'expo-localization'
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
 
-import en from './locales/en.json';
-import pt from './locales/pt.json';
+import en from './locales/en.json'
+import pt from './locales/pt.json'
 
 const initI18n = async () => {
-  let savedLanguage = await AsyncStorage.getItem('language');
+  let savedLanguage = await AsyncStorage.getItem('language')
 
   if (!savedLanguage) {
-    savedLanguage = Localization.locale;
+    savedLanguage = Localization.locale
   }
 
   await i18n.use(initReactI18next).init({
@@ -24,9 +24,10 @@ const initI18n = async () => {
     interpolation: {
       escapeValue: false,
     },
-  });
-};
+  })
+}
 
-initI18n();
+initI18n()
 
-export default i18n; en
+export default i18n
+en
