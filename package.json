@@ -9,7 +9,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest",
-    "lint": "expo lint",
+    "lint": "biome check",
+    "lint:fix": "biome check --write",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "release:patch": "npm version patch -m 'release: %s' && git push && git push --tags",
@@ -32,6 +33,7 @@
     "expo-haptics": "~14.0.1",
     "expo-linear-gradient": "~14.0.2",
     "expo-linking": "~7.0.5",
+    "expo-localization": "~16.0.1",
     "expo-router": "~4.0.17",
     "expo-splash-screen": "~0.29.22",
     "expo-status-bar": "~2.0.1",
@@ -50,11 +52,11 @@
     "react-native-screens": "~4.4.0",
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.5",
-    "zod": "^3.24.2",
-    "expo-localization": "~16.0.1"
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@biomejs/biome": "1.9.4",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-native": "^13.2.0",
     "@types/jest": "^29.5.14",
