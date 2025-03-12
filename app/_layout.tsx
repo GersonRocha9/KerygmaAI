@@ -17,22 +17,18 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { I18nextProvider } from 'react-i18next'
-import { StyleSheet, useColorScheme } from 'react-native'
+import { StyleSheet, View, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
-import React from 'react'
-import i18n from '../i18n'
-import { UpdateAlert } from './components/UpdateAlert'
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router'
+import { UpdateAlert } from '@/components/UpdateAlert'
+import i18n from '../i18n'
+
+export { ErrorBoundary } from 'expo-router'
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 }
 
@@ -46,7 +42,7 @@ const queryClient = new QueryClient({
   },
 })
 
-SplashScreen.preventAutoHideAsync()
+void SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
   const [i18nInitialized, setI18nInitialized] = useState(false)
@@ -72,12 +68,12 @@ export default function RootLayout() {
       }
     }
 
-    init()
+    void init()
   }, [])
 
   useEffect(() => {
     if (loaded && i18nInitialized) {
-      SplashScreen.hideAsync()
+      void SplashScreen.hideAsync()
     }
   }, [loaded, i18nInitialized])
 
@@ -85,12 +81,7 @@ export default function RootLayout() {
     return null
   }
 
-  return (
-    <>
-      <RootLayoutNav />
-      <UpdateAlert />
-    </>
-  )
+  return <RootLayoutNav />
 }
 
 function RootLayoutNav() {
@@ -103,10 +94,13 @@ function RootLayoutNav() {
           value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
         >
           <I18nextProvider i18n={i18n}>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-            <StatusBar style="auto" />
+            <View style={styles.container}>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              </Stack>
+              <StatusBar style="auto" />
+              <UpdateAlert />
+            </View>
           </I18nextProvider>
         </ThemeProvider>
       </GestureHandlerRootView>

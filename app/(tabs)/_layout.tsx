@@ -1,69 +1,82 @@
 import { Tabs } from 'expo-router'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Animated, Dimensions, Platform, StyleSheet, View } from 'react-native'
+import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react'
+import {
+  Animated,
+  Dimensions,
+  Platform,
+  StyleSheet,
+  View,
+  useColorScheme,
+} from 'react-native'
 
 import { HapticTab } from '@/components/HapticTab'
 import { IconSymbol } from '@/components/ui/IconSymbol'
 import TabBarBackground from '@/components/ui/TabBarBackground'
+import { Colors } from '@/constants/Colors'
 
 export default function TabLayout() {
   const { width } = Dimensions.get('window')
   const isSmallDevice = width < 375
+  const colorScheme = useColorScheme()
+  const theme = Colors[colorScheme ?? 'light']
 
   const animatedValue = useRef(new Animated.Value(0)).current
   const [tabWidth, setTabWidth] = useState(width / 2)
   const [activeTabIndex, setActiveTabIndex] = useState(0)
 
-  const handleTabPress = (index: number) => {
-    setActiveTabIndex(index)
-    animateIndicator(index)
-  }
+  const animateIndicator = useCallback(
+    (index: number) => {
+      Animated.spring(animatedValue, {
+        toValue: index * tabWidth,
+        tension: 180,
+        friction: 25,
+        useNativeDriver: true,
+      }).start()
+    },
+    [animatedValue, tabWidth]
+  )
 
-  const animateIndicator = (index: number) => {
-    Animated.spring(animatedValue, {
-      toValue: index * tabWidth,
-      tension: 180,
-      friction: 25,
-      useNativeDriver: true,
-    }).start()
-  }
+  const handleTabPress = useCallback(
+    (index: number) => {
+      setActiveTabIndex(index)
+      animateIndicator(index)
+    },
+    [animateIndicator]
+  )
 
   useEffect(() => {
-    // Animar quando o tamanho da tab ou o índice ativo muda
     animateIndicator(activeTabIndex)
-  }, [tabWidth, activeTabIndex])
+  }, [activeTabIndex, animateIndicator])
 
-  const primaryColor = '#4CAF50'
-  const inactiveColor = Platform.OS === 'ios' ? '#8E8E93' : '#757575'
-
-  // Renderizar a barra de tabs personalizada
   const renderTabBar = useMemo(() => {
     return (props: any) => {
-      // Calcular a largura da tab com base no número de rotas
       const routesCount = props.state.routes.length
       if (routesCount > 0 && width / routesCount !== tabWidth) {
-        // Usar setTimeout para evitar atualização durante renderização
         setTimeout(() => {
           setTabWidth(width / routesCount)
         }, 0)
       }
 
-      // Sincronizar o índice ativo com o estado de navegação
       if (props.state.index !== activeTabIndex) {
-        // Usar setTimeout para evitar atualização durante renderização
         setTimeout(() => {
           setActiveTabIndex(props.state.index)
         }, 0)
       }
 
       return (
-        <View style={styles.tabBarContainer}>
+        <View
+          style={[
+            styles.tabBarContainer,
+            { backgroundColor: theme.background },
+          ]}
+        >
           <Animated.View
             style={[
               styles.tabIndicator,
               {
                 transform: [{ translateX: animatedValue }],
                 width: tabWidth,
+                backgroundColor: theme.tint,
               },
             ]}
           />
@@ -87,13 +100,17 @@ export default function TabLayout() {
                   style={styles.tab}
                 >
                   {props.descriptors[route.key].options.tabBarIcon({
-                    color: isFocused ? primaryColor : inactiveColor,
+                    color: isFocused
+                      ? theme.tabIconSelected
+                      : theme.tabIconDefault,
                   })}
                   <Animated.Text
                     style={[
                       styles.tabText,
                       {
-                        color: isFocused ? primaryColor : inactiveColor,
+                        color: isFocused
+                          ? theme.tabIconSelected
+                          : theme.tabIconDefault,
                       },
                     ]}
                   >
@@ -111,14 +128,7 @@ export default function TabLayout() {
         </View>
       )
     }
-  }, [
-    width,
-    activeTabIndex,
-    animatedValue,
-    tabWidth,
-    primaryColor,
-    inactiveColor,
-  ])
+  }, [animatedValue, handleTabPress, tabWidth, width, activeTabIndex, theme])
 
   return (
     <Tabs
@@ -167,7 +177,6 @@ const styles = StyleSheet.create({
     height: Platform.OS === 'ios' ? 88 : 64,
     paddingBottom: Platform.OS === 'ios' ? 24 : 0,
     position: 'relative',
-    backgroundColor: Platform.OS === 'android' ? '#FFFFFF' : 'transparent',
     borderTopWidth: 1,
     borderTopColor: 'rgba(0,0,0,0.05)',
   },
@@ -189,7 +198,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     height: 3,
-    backgroundColor: '#4CAF50',
     zIndex: 1,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,

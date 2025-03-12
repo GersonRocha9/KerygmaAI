@@ -195,12 +195,7 @@ export default function DevotionalScreen() {
                     {loading ? (
                       <ActivityIndicator color={colors.primary} size="small" />
                     ) : (
-                      <ThemedText
-                        style={[
-                          styles.buttonText,
-                          { color: colors.textPrimary },
-                        ]}
-                      >
+                      <ThemedText style={[styles.buttonText]}>
                         {t('devotional.generateButton')}
                       </ThemedText>
                     )}
@@ -319,6 +314,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: 'Inter-SemiBold',
     fontSize: 16,
+    color: '#FFF',
   },
   errorText: {
     textAlign: 'center',
