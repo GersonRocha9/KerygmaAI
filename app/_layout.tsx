@@ -22,7 +22,9 @@ import { I18nextProvider } from 'react-i18next'
 import { StyleSheet, useColorScheme } from 'react-native'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
+import React from 'react'
 import i18n from '../i18n'
+import { UpdateAlert } from './components/UpdateAlert'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -44,7 +46,6 @@ const queryClient = new QueryClient({
   },
 })
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
@@ -84,7 +85,12 @@ export default function RootLayout() {
     return null
   }
 
-  return <RootLayoutNav />
+  return (
+    <>
+      <RootLayoutNav />
+      <UpdateAlert />
+    </>
+  )
 }
 
 function RootLayoutNav() {
