@@ -1,7 +1,7 @@
 import { ThemedText } from '@/components/ThemedText'
+import { useCheckUpdate } from '@/hooks/useCheckUpdate'
 import React from 'react'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
-import { useCheckUpdate } from '../hooks/useCheckUpdate'
 
 export function UpdateAlert() {
   const { isUpdateAvailable, openStore } = useCheckUpdate()

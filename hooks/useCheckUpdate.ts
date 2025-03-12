@@ -37,11 +37,18 @@ export function useCheckUpdate(): UseCheckUpdateReturn {
   }
 
   const checkForUpdate = useCallback(async () => {
+    if (__DEV__) {
+      return // Ignora a verificação em ambiente de desenvolvimento
+    }
+
     try {
       const update = await Updates.checkForUpdateAsync()
       setIsUpdateAvailable(update.isAvailable)
     } catch (error) {
-      console.error('Error checking for updates:', error)
+      // Só loga o erro em produção
+      if (!__DEV__) {
+        console.warn('Error checking for updates:', error)
+      }
     }
   }, [])
 
