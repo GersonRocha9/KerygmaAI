@@ -16,6 +16,7 @@ import { useFocusEffect, useRouter } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import {
   ActivityIndicator,
+  Pressable,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -40,21 +41,21 @@ export default function HomeScreen() {
   const { data: translatedVerse, isLoading: verseLoading } =
     useTranslatedVerseOfTheDay()
 
-  const loadDevotionalHistory = async () => {
-    try {
-      setLoading(true)
-      const recentDevotionals = await loadRecentDevotionals(3)
-      setDevotionalHistory(recentDevotionals)
-    } catch (error) {
-      console.error('Erro ao carregar histórico de devocionais:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
   useFocusEffect(
     useCallback(() => {
-      loadDevotionalHistory()
+      const loadDevotionalHistory = async () => {
+        try {
+          setLoading(true)
+          const recentDevotionals = await loadRecentDevotionals(3)
+          setDevotionalHistory(recentDevotionals)
+        } catch (error) {
+          console.error('Erro ao carregar histórico de devocionais:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
+
+      void loadDevotionalHistory()
     }, [])
   )
 
@@ -96,14 +97,25 @@ export default function HomeScreen() {
             />
             <ThemedText type="title">{t('common.appName')}</ThemedText>
           </View>
-          <TouchableOpacity
+          <Pressable
             onPress={toggleLanguage}
-            style={[styles.languageButton, { backgroundColor: colors.primary }]}
+            style={({ pressed }) => [
+              styles.languageButton,
+              {
+                borderColor: colors.primary,
+                backgroundColor: pressed
+                  ? `${colors.primary}15`
+                  : 'transparent',
+                transform: [{ scale: pressed ? 0.98 : 1 }],
+              },
+            ]}
           >
-            <ThemedText style={styles.languageButtonText}>
-              {isEnglish ? 'EN' : 'PT'}
+            <ThemedText
+              style={[styles.languageButtonText, { color: colors.primary }]}
+            >
+              {isEnglish ? '🇺🇸 EN' : '🇧🇷 PT'}
             </ThemedText>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {verseLoading ? (
@@ -243,14 +255,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   languageButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 16,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    elevation: 0,
+    shadowColor: 'transparent',
   },
   languageButtonText: {
-    color: '#FFFFFF',
     fontSize: 14,
-    fontFamily: 'Inter-Medium',
+    fontFamily: 'Inter-SemiBold',
   },
   loadingContainer: {
     alignItems: 'center',
