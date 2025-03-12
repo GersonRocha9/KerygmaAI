@@ -1,3 +1,4 @@
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { Tabs } from 'expo-router'
 import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react'
 import {
@@ -13,12 +14,14 @@ import { HapticTab } from '@/components/HapticTab'
 import { IconSymbol } from '@/components/ui/IconSymbol'
 import TabBarBackground from '@/components/ui/TabBarBackground'
 import { Colors } from '@/constants/Colors'
+import { useLanguage } from '@/hooks/useLanguage'
 
 export default function TabLayout() {
   const { width } = Dimensions.get('window')
   const isSmallDevice = width < 375
   const colorScheme = useColorScheme()
   const theme = Colors[colorScheme ?? 'light']
+  const { t } = useLanguage()
 
   const animatedValue = useRef(new Animated.Value(0)).current
   const [tabWidth, setTabWidth] = useState(width / 2)
@@ -49,7 +52,7 @@ export default function TabLayout() {
   }, [activeTabIndex, animateIndicator])
 
   const renderTabBar = useMemo(() => {
-    return (props: any) => {
+    return (props: BottomTabBarProps) => {
       const routesCount = props.state.routes.length
       if (routesCount > 0 && width / routesCount !== tabWidth) {
         setTimeout(() => {
@@ -84,51 +87,64 @@ export default function TabLayout() {
           <TabBarBackground />
 
           <View style={styles.tabBar}>
-            {props.state.routes.map((route: any, index: number) => {
-              const isFocused = props.state.index === index
-              const onPress = () => {
-                handleTabPress(index)
-                props.navigation.navigate(route.name)
-              }
+            {props.state.routes.map(
+              (route: { key: string; name: string }, index: number) => {
+                const isFocused = props.state.index === index
+                const onPress = () => {
+                  handleTabPress(index)
+                  props.navigation.navigate(route.name)
+                }
 
-              return (
-                <HapticTab
-                  key={route.key}
-                  accessibilityRole="button"
-                  accessibilityState={isFocused ? { selected: true } : {}}
-                  onPress={onPress}
-                  style={styles.tab}
-                >
-                  {props.descriptors[route.key].options.tabBarIcon({
-                    color: isFocused
-                      ? theme.tabIconSelected
-                      : theme.tabIconDefault,
-                  })}
-                  <Animated.Text
-                    style={[
-                      styles.tabText,
-                      {
-                        color: isFocused
-                          ? theme.tabIconSelected
-                          : theme.tabIconDefault,
-                      },
-                    ]}
+                return (
+                  <HapticTab
+                    key={route.key}
+                    accessibilityRole="button"
+                    accessibilityState={isFocused ? { selected: true } : {}}
+                    onPress={onPress}
+                    style={styles.tab}
                   >
-                    {route.name === 'index'
-                      ? 'Início'
-                      : route.name === 'devotional'
-                        ? 'Devocional'
-                        : route.name.charAt(0).toUpperCase() +
-                          route.name.slice(1)}
-                  </Animated.Text>
-                </HapticTab>
-              )
-            })}
+                    {props.descriptors[route.key].options.tabBarIcon?.({
+                      focused: isFocused,
+                      color: isFocused
+                        ? theme.tabIconSelected
+                        : theme.tabIconDefault,
+                      size: isSmallDevice ? 24 : 26,
+                    })}
+                    <Animated.Text
+                      style={[
+                        styles.tabText,
+                        {
+                          color: isFocused
+                            ? theme.tabIconSelected
+                            : theme.tabIconDefault,
+                        },
+                      ]}
+                    >
+                      {route.name === 'index'
+                        ? t('tabs.home')
+                        : route.name === 'devotional'
+                          ? t('tabs.devotional')
+                          : route.name.charAt(0).toUpperCase() +
+                            route.name.slice(1)}
+                    </Animated.Text>
+                  </HapticTab>
+                )
+              }
+            )}
           </View>
         </View>
       )
     }
-  }, [animatedValue, handleTabPress, tabWidth, width, activeTabIndex, theme])
+  }, [
+    animatedValue,
+    handleTabPress,
+    tabWidth,
+    width,
+    activeTabIndex,
+    theme,
+    t,
+    isSmallDevice,
+  ])
 
   return (
     <Tabs
@@ -140,8 +156,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Início',
-          tabBarIcon: ({ color }) => (
+          title: t('tabs.home'),
+          tabBarIcon: ({ color, size }) => (
             <IconSymbol
               size={isSmallDevice ? 24 : 26}
               name="house.fill"
@@ -154,8 +170,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="devotional"
         options={{
-          title: 'Devocional',
-          tabBarIcon: ({ color }) => (
+          title: t('tabs.devotional'),
+          tabBarIcon: ({ color, size }) => (
             <IconSymbol
               size={isSmallDevice ? 24 : 26}
               name="book.fill"

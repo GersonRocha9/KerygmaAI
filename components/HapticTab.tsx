@@ -2,14 +2,20 @@ import type { BottomTabBarButtonProps } from '@react-navigation/bottom-tabs'
 import { PlatformPressable } from '@react-navigation/elements'
 import * as Haptics from 'expo-haptics'
 import React, { useCallback, useRef } from 'react'
-import { Animated, Platform, StyleSheet, View } from 'react-native'
+import {
+  Animated,
+  type GestureResponderEvent,
+  Platform,
+  StyleSheet,
+  View,
+} from 'react-native'
 
 export function HapticTab(props: BottomTabBarButtonProps) {
   const scaleAnim = useRef(new Animated.Value(1)).current
   const isActive = props.accessibilityState?.selected
 
   const handlePressIn = useCallback(
-    (ev: any) => {
+    (ev: GestureResponderEvent) => {
       Animated.spring(scaleAnim, {
         toValue: 0.92,
         friction: 5,
@@ -27,7 +33,7 @@ export function HapticTab(props: BottomTabBarButtonProps) {
   )
 
   const handlePressOut = useCallback(
-    (ev: any) => {
+    (ev: GestureResponderEvent) => {
       Animated.spring(scaleAnim, {
         toValue: 1,
         friction: 5,
