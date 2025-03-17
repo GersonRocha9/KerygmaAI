@@ -4,9 +4,7 @@ import { Alert, TouchableOpacity } from 'react-native'
 
 // Mock do Stack para evitar problemas com expo-router
 jest.mock('expo-router', () => ({
-  Stack: {
-    Screen: (props: any) => null,
-  },
+  Stack: { Screen: () => null },
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),

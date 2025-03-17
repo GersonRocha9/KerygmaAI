@@ -3,9 +3,7 @@ import React from 'react'
 
 // Mock do Stack e useLocalSearchParams do expo-router
 jest.mock('expo-router', () => ({
-  Stack: {
-    Screen: (props: any) => null,
-  },
+  Stack: { Screen: () => null },
   useLocalSearchParams: jest.fn(() => ({
     title: 'Esperança em Tempos Difíceis',
     content:

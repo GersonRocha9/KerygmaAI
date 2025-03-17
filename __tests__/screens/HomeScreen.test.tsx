@@ -6,7 +6,7 @@ jest.mock('react', () => {
   const originalReact = jest.requireActual('react')
   return {
     ...originalReact,
-    useCallback: (callback: any) => callback,
+    useCallback: (callback: () => unknown) => callback,
   }
 })
 
