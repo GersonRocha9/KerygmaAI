@@ -37,13 +37,7 @@ export default function TabBarBackground() {
 
   // For Android, use a gradient background with elevation
   return (
-    <View
-      style={[
-        styles.background,
-        styles.androidContainer,
-        { paddingBottom: bottomInset },
-      ]}
-    >
+    <View style={[styles.androidContainer, { paddingBottom: bottomInset }]}>
       <LinearGradient
         colors={[colors.surface, colors.surfaceVariant]}
         style={styles.androidGradient}
