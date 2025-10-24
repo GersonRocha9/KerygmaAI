@@ -1,13 +1,12 @@
-import { ThemedText } from "@/src/components/ThemedText";
-import { useCheckUpdate } from "@/src/hooks/useCheckUpdate";
-import React from "react";
-import { Platform, Pressable, StyleSheet, View } from "react-native";
+import { ThemedText } from '@/src/components/ThemedText'
+import { useCheckUpdate } from '@/src/hooks/useCheckUpdate'
+import { Platform, Pressable, StyleSheet, View } from 'react-native'
 
 export function UpdateAlert() {
-  const { isUpdateAvailable, openStore } = useCheckUpdate();
+  const { isUpdateAvailable, openStore } = useCheckUpdate()
 
   if (!isUpdateAvailable) {
-    return null;
+    return null
   }
 
   return (
@@ -15,8 +14,8 @@ export function UpdateAlert() {
       <View style={styles.content}>
         <ThemedText style={styles.title}>Nova versão disponível!</ThemedText>
         <ThemedText style={styles.message}>
-          Uma nova versão do app está disponível na{" "}
-          {Platform.OS === "ios" ? "App Store" : "Play Store"}. Atualize agora
+          Uma nova versão do app está disponível na{' '}
+          {Platform.OS === 'ios' ? 'App Store' : 'Play Store'}. Atualize agora
           para ter acesso às últimas novidades!
         </ThemedText>
         <Pressable onPress={openStore} style={styles.button}>
@@ -24,44 +23,44 @@ export function UpdateAlert() {
         </Pressable>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
-    position: "absolute",
+    position: 'absolute',
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.9)",
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
     padding: 16,
   },
   content: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 12,
     padding: 16,
   },
   title: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginBottom: 8,
-    textAlign: "center",
+    textAlign: 'center',
   },
   message: {
     fontSize: 16,
     marginBottom: 16,
-    textAlign: "center",
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: '#4CAF50',
     paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 8,
-    alignItems: "center",
+    alignItems: 'center',
   },
   buttonText: {
-    color: "#fff",
+    color: '#fff',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
-});
+})

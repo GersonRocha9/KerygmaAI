@@ -149,22 +149,22 @@ export const extractDevotionalParts = (
 
   // Extrai a introdução - suporta formato em português e inglês
   const introducaoPtMatch = contentStr.match(
-    /INTRODUÇÃO:\s*([^]*?)(?=TÓPICO I:|$)/is
+    /INTRODUÇÃO:\s*([\s\S]*?)(?=TÓPICO I:|$)/is
   )
 
   // Em inglês, a introdução pode estar em diferentes formatos
   const introducaoEnMatch =
     // Formato 1: Após "Introduction:" e antes de "Bible Verses:"
     contentStr.match(
-      /Introduction:?\s*([^]*?)(?=Bible Verses?:|Reflection:|$)/is
+      /Introduction:?\s*([\s\S]*?)(?=Bible Verses?:|Reflection:|$)/is
     ) ||
     // Formato 2: No início do texto até "Bible Verses:" ou até reflexão, se não houver marcador explícito
     contentStr.match(
-      /^(?:Title[:\s]*[^\n]*\n+)?([^]*?)(?=Bible Verses?:|Reflection:|1\.\s+[A-Z]|$)/is
+      /^(?:Title[:\s]*[^\n]*\n+)?([\s\S]*?)(?=Bible Verses?:|Reflection:|1\.\s+[A-Z]|$)/is
     ) ||
     // Formato 3: Após o título até a primeira seção identificável
     contentStr.match(
-      /^\*\*[^\n]*\*\*\s*\n\n([^]*?)(?=\*\*|Bible Verses?:|Reflection:|$)/is
+      /^\*\*[^\n]*\*\*\s*\n\n([\s\S]*?)(?=\*\*|Bible Verses?:|Reflection:|$)/is
     )
 
   if (introducaoPtMatch?.[1]) {
@@ -186,7 +186,7 @@ export const extractDevotionalParts = (
 
   // Extrai os tópicos em português (pode haver mais de 3)
   const topicosPtRegex =
-    /TÓPICO (I|II|III|IV|V|VI):\s*([^\n]+)([^]*?)(?=TÓPICO |CONCLUSÃO:|ORAÇÃO:|$)/gi
+    /TÓPICO (I|II|III|IV|V|VI):\s*([^\n]+)([\s\S]*?)(?=TÓPICO |CONCLUSÃO:|ORAÇÃO:|$)/gi
   let topicoPtMatch: RegExpExecArray | null
 
   // Use a separate variable for the loop condition check
@@ -212,10 +212,10 @@ export const extractDevotionalParts = (
 
   // Extrai os tópicos em inglês (Reflection, Practical Application)
   const topicosEnReflection = contentStr.match(
-    /Reflection:?\s*([^]*?)(?=Practical Application:|Closing Prayer:|$)/is
+    /Reflection:?\s*([\s\S]*?)(?=Practical Application:|Closing Prayer:|$)/is
   )
   const topicosEnApplication = contentStr.match(
-    /Practical Application:?\s*([^]*?)(?=Closing Prayer:|$)/is
+    /Practical Application:?\s*([\s\S]*?)(?=Closing Prayer:|$)/is
   )
 
   if (topicosEnReflection?.[1]) {
@@ -265,7 +265,7 @@ export const extractDevotionalParts = (
 
   // Extrai a conclusão - suporta formato em português
   const conclusaoPtMatch = contentStr.match(
-    /CONCLUSÃO:\s*([^]*?)(?=ORAÇÃO:|$)/is
+    /CONCLUSÃO:\s*([\s\S]*?)(?=ORAÇÃO:|$)/is
   )
   if (conclusaoPtMatch?.[1]) {
     result.conclusaoParagraphs = conclusaoPtMatch[1]
@@ -275,8 +275,8 @@ export const extractDevotionalParts = (
   }
 
   // Extrai a oração - suporta formato em português e inglês
-  const oracaoPtMatch = contentStr.match(/ORAÇÃO:\s*([^]*?)$/is)
-  const oracaoEnMatch = contentStr.match(/Closing Prayer:?\s*([^]*?)$/is)
+  const oracaoPtMatch = contentStr.match(/ORAÇÃO:\s*([\s\S]*?)$/is)
+  const oracaoEnMatch = contentStr.match(/Closing Prayer:?\s*([\s\S]*?)$/is)
 
   if (oracaoPtMatch?.[1]) {
     result.oracaoParagraphs = oracaoPtMatch[1]

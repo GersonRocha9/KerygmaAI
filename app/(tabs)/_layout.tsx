@@ -1,10 +1,8 @@
-import { useThemeColors } from "@/src/hooks/useTheme";
-import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
-
-import React from "react";
+import { useThemeColors } from '@/src/hooks/useTheme'
+import { Icon, Label, NativeTabs } from 'expo-router/unstable-native-tabs'
 
 export default function TabLayout() {
-  const colors = useThemeColors();
+  const colors = useThemeColors()
 
   return (
     <NativeTabs iconColor={colors.primary}>
@@ -17,5 +15,5 @@ export default function TabLayout() {
         <Label>Devocional</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
-  );
+  )
 }

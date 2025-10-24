@@ -3,24 +3,23 @@ import {
   useThemeColors,
   useThemeElevation,
   useThemeSpacing,
-} from "@/src/hooks/useTheme";
-import React from "react";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "./ThemedText";
-import { ThemedView } from "./ThemedView";
-import { IconSymbol } from "./ui/IconSymbol";
+} from '@/src/hooks/useTheme'
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native'
+import { ThemedText } from './ThemedText'
+import { ThemedView } from './ThemedView'
+import { IconSymbol } from './ui/IconSymbol'
 
 type VerseCardProps = {
-  verse: string;
-  reference: string;
-  onShare?: () => void;
-};
+  verse: string
+  reference: string
+  onShare?: () => void
+}
 
 export function VerseCard({ verse, reference, onShare }: VerseCardProps) {
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const elevation = useThemeElevation();
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const elevation = useThemeElevation()
 
   return (
     <ThemedView
@@ -68,7 +67,7 @@ export function VerseCard({ verse, reference, onShare }: VerseCardProps) {
         {verse}
       </ThemedText>
     </ThemedView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -76,9 +75,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -89,10 +88,10 @@ const styles = StyleSheet.create({
   verse: {
     fontSize: 16,
     lineHeight: 24,
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   reference: {
     fontSize: 14,
-    textAlign: "right",
+    textAlign: 'right',
   },
-});
+})

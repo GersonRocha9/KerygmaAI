@@ -40,10 +40,6 @@ export const generateDevotional = async (
   }
 
   try {
-    console.log(
-      `Generating devotional for theme "${theme}" in ${isEnglish ? 'English' : 'Portuguese'}`
-    )
-
     // Define a instrução do sistema com base no idioma
     const systemPrompt = isEnglish
       ? `You are an attentive spiritual guide who creates deep and detailed devotionals.

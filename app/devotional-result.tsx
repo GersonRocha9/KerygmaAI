@@ -1,80 +1,80 @@
-import { ThemedText } from "@/src/components/ThemedText";
-import { ThemedView } from "@/src/components/ThemedView";
-import { IconSymbol } from "@/src/components/ui/IconSymbol";
-import { Fonts } from "@/src/constants/Fonts";
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
+import { Fonts } from '@/src/constants/Fonts'
 import {
   extractDevotionalParts,
   formatTitle,
-} from "@/src/formatters/textFormatters";
-import { useLanguage } from "@/src/hooks/useLanguage";
+} from '@/src/formatters/textFormatters'
+import { useLanguage } from '@/src/hooks/useLanguage'
 import {
   useThemeBorderRadius,
   useThemeColors,
   useThemeSpacing,
-} from "@/src/hooks/useTheme";
-import { shareDevotional } from "@/src/services/shareService";
-import { Stack, useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+} from '@/src/hooks/useTheme'
+import { shareDevotional } from '@/src/services/shareService'
+import { Stack, useLocalSearchParams } from 'expo-router'
+import { useState } from 'react'
 import {
   ActivityIndicator,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function DevotionalResultScreen() {
   const { title, content, theme, fromHistory } = useLocalSearchParams<{
-    title: string;
-    content: string;
-    theme?: string;
-    fromHistory?: string;
-  }>();
+    title: string
+    content: string
+    theme?: string
+    fromHistory?: string
+  }>()
 
-  const [isSharing, setIsSharing] = useState(false);
-  const [isSaved] = useState(fromHistory === "true");
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const borderRadius = useThemeBorderRadius();
-  const { t } = useLanguage();
+  const [isSharing, setIsSharing] = useState(false)
+  const [isSaved] = useState(fromHistory === 'true')
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const borderRadius = useThemeBorderRadius()
+  const { t } = useLanguage()
 
   // Processar o conteúdo para exibição
-  const processedTitle = formatTitle(title);
-  const devotionalParts = extractDevotionalParts(content);
+  const processedTitle = formatTitle(title)
+  const devotionalParts = extractDevotionalParts(content)
 
   // Função para compartilhar o devocional
   const handleShare = async () => {
     if (content) {
-      setIsSharing(true);
+      setIsSharing(true)
       try {
         const contentToShare = `${
-          processedTitle || t("devotionalResult.title")
-        }\n\n${content}`;
+          processedTitle || t('devotionalResult.title')
+        }\n\n${content}`
         await shareDevotional(
           contentToShare,
-          processedTitle || t("devotionalResult.title")
-        );
+          processedTitle || t('devotionalResult.title')
+        )
       } catch (error) {
-        console.error(t("devotionalResult.shareError"), error);
+        console.error(t('devotionalResult.shareError'), error)
       } finally {
-        setIsSharing(false);
+        setIsSharing(false)
       }
     }
-  };
+  }
 
   return (
     <>
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: t("devotionalResult.title"),
+          headerTitle: t('devotionalResult.title'),
           headerTintColor: colors.primary,
           headerTitleStyle: {
             color: colors.primary,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
-          headerBackTitle: t("common.back"),
+          headerBackTitle: t('common.back'),
           headerRight: () => (
             <TouchableOpacity
               style={styles.headerShareButton}
@@ -97,7 +97,7 @@ export default function DevotionalResultScreen() {
 
       <SafeAreaView
         style={styles.container}
-        edges={["bottom", "left", "right"]}
+        edges={['bottom', 'left', 'right']}
       >
         <ScrollView
           style={styles.contentContainer}
@@ -190,7 +190,7 @@ export default function DevotionalResultScreen() {
                         },
                       ]}
                     >
-                      {t("devotionalResult.introduction")}
+                      {t('devotionalResult.introduction')}
                     </ThemedText>
                     {devotionalParts.introducaoParagraphs.map(
                       (paragraph: string, index: number) => (
@@ -211,7 +211,7 @@ export default function DevotionalResultScreen() {
 
                 {/* Tópicos */}
                 {devotionalParts.topicos.length > 0 &&
-                  devotionalParts.topicos.map((topico) => (
+                  devotionalParts.topicos.map(topico => (
                     <View key={`topico-${topico.titulo}`}>
                       <ThemedText
                         variant="primary"
@@ -226,11 +226,11 @@ export default function DevotionalResultScreen() {
                           },
                         ]}
                       >
-                        {topico.titulo === "Reflection"
-                          ? t("devotionalResult.reflection")
-                          : topico.titulo === "Practical Application"
-                          ? t("devotionalResult.practicalApplication")
-                          : topico.titulo}
+                        {topico.titulo === 'Reflection'
+                          ? t('devotionalResult.reflection')
+                          : topico.titulo === 'Practical Application'
+                            ? t('devotionalResult.practicalApplication')
+                            : topico.titulo}
                       </ThemedText>
                       {topico.paragraphs.map(
                         (paragraph: string, paragraphIndex: number) => (
@@ -265,7 +265,7 @@ export default function DevotionalResultScreen() {
                         },
                       ]}
                     >
-                      {t("devotionalResult.conclusion")}
+                      {t('devotionalResult.conclusion')}
                     </ThemedText>
                     {devotionalParts.conclusaoParagraphs.map(
                       (paragraph: string, index: number) => (
@@ -300,7 +300,7 @@ export default function DevotionalResultScreen() {
                         },
                       ]}
                     >
-                      {t("devotionalResult.prayer")}
+                      {t('devotionalResult.prayer')}
                     </ThemedText>
                     {devotionalParts.oracaoParagraphs.map(
                       (paragraph: string, index: number) => (
@@ -342,13 +342,13 @@ export default function DevotionalResultScreen() {
               style={[styles.disclaimerIcon, { marginTop: 3 }]}
             />
             <ThemedText variant="tertiary" style={styles.disclaimerText}>
-              {t("devotionalResult.disclaimer")}
+              {t('devotionalResult.disclaimer')}
             </ThemedText>
           </View>
         </ScrollView>
       </SafeAreaView>
     </>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -358,8 +358,8 @@ const styles = StyleSheet.create({
   headerShareButton: {
     width: 40,
     height: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: -8,
   },
   contentContainer: {
@@ -372,18 +372,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   devotionalTitleContainer: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   devotionalTitle: {
     fontSize: 24,
     fontFamily: Fonts.bold,
-    textAlign: "center",
+    textAlign: 'center',
   },
   verseContainer: {
-    position: "relative",
+    position: 'relative',
   },
   quoteIcon: {
-    position: "absolute",
+    position: 'absolute',
     top: 8,
     left: 8,
     opacity: 0.5,
@@ -391,21 +391,21 @@ const styles = StyleSheet.create({
   verseText: {
     fontSize: 18,
     fontFamily: Fonts.medium,
-    fontStyle: "italic",
+    fontStyle: 'italic',
     marginBottom: 8,
-    textAlign: "center",
+    textAlign: 'center',
   },
   verseReference: {
     fontSize: 14,
     fontFamily: Fonts.regular,
-    textAlign: "right",
-    fontWeight: "bold",
-    alignSelf: "flex-end",
+    textAlign: 'right',
+    fontWeight: 'bold',
+    alignSelf: 'flex-end',
   },
   paragraph: {
     fontSize: 16,
     lineHeight: 24,
-    textAlign: "justify",
+    textAlign: 'justify',
     fontFamily: Fonts.regular,
   },
   sectionTitle: {
@@ -417,11 +417,11 @@ const styles = StyleSheet.create({
     fontFamily: Fonts.semiBold,
   },
   prayerText: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
   },
   disclaimerContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   disclaimerIcon: {
     marginRight: 8,
@@ -431,4 +431,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
   },
-});
+})

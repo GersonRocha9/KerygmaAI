@@ -1,5 +1,4 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
-import React from 'react'
 import { Alert, TouchableOpacity } from 'react-native'
 
 // Mock do Stack para evitar problemas com expo-router

@@ -1,5 +1,4 @@
 import { render } from '@testing-library/react-native'
-import React from 'react'
 
 // Mock do Stack e useLocalSearchParams do expo-router
 jest.mock('expo-router', () => ({

@@ -1,19 +1,19 @@
-import { CreateDevotionalButton } from "@/src/components/CreateDevotionalButton";
-import { DevotionalListItem } from "@/src/components/DevotionalListItem";
-import { ThemedText } from "@/src/components/ThemedText";
-import { ThemedView } from "@/src/components/ThemedView";
-import { VerseCard } from "@/src/components/VerseCard";
-import { IconSymbol } from "@/src/components/ui/IconSymbol";
-import { useTranslatedVerseOfTheDay } from "@/src/hooks/queries/useVerseOfTheDay";
-import { useLanguage } from "@/src/hooks/useLanguage";
-import { useThemeColors, useThemeSpacing } from "@/src/hooks/useTheme";
+import { CreateDevotionalButton } from '@/src/components/CreateDevotionalButton'
+import { DevotionalListItem } from '@/src/components/DevotionalListItem'
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { VerseCard } from '@/src/components/VerseCard'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
+import { useTranslatedVerseOfTheDay } from '@/src/hooks/queries/useVerseOfTheDay'
+import { useLanguage } from '@/src/hooks/useLanguage'
+import { useThemeColors, useThemeSpacing } from '@/src/hooks/useTheme'
 import {
   type DevotionalHistory,
   loadRecentDevotionals,
-} from "@/src/services/devotionalService";
-import { shareVerse } from "@/src/services/shareService";
-import { useFocusEffect, useRouter } from "expo-router";
-import React, { useCallback, useState } from "react";
+} from '@/src/services/devotionalService'
+import { shareVerse } from '@/src/services/shareService'
+import { useFocusEffect, useRouter } from 'expo-router'
+import { useCallback, useState } from 'react'
 import {
   ActivityIndicator,
   Pressable,
@@ -21,65 +21,65 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function HomeScreen() {
-  const router = useRouter();
-  const colors = useThemeColors();
-  const spacing = useThemeSpacing();
-  const { t, toggleLanguage, isEnglish } = useLanguage();
+  const router = useRouter()
+  const colors = useThemeColors()
+  const spacing = useThemeSpacing()
+  const { t, toggleLanguage, isEnglish } = useLanguage()
   const [devotionalHistory, setDevotionalHistory] = useState<
     DevotionalHistory[]
-  >([]);
-  const [loading, setLoading] = useState(true);
+  >([])
+  const [loading, setLoading] = useState(true)
 
   const handleCreateDevotional = () => {
-    router.push("/devotional");
-  };
+    router.push('/devotional')
+  }
 
   const { data: translatedVerse, isLoading: verseLoading } =
-    useTranslatedVerseOfTheDay();
+    useTranslatedVerseOfTheDay()
 
   useFocusEffect(
     useCallback(() => {
       const loadDevotionalHistory = async () => {
         try {
-          setLoading(true);
-          const recentDevotionals = await loadRecentDevotionals(3);
-          setDevotionalHistory(recentDevotionals);
+          setLoading(true)
+          const recentDevotionals = await loadRecentDevotionals(3)
+          setDevotionalHistory(recentDevotionals)
         } catch (error) {
-          console.error("Erro ao carregar histórico de devocionais:", error);
+          console.error('Erro ao carregar histórico de devocionais:', error)
         } finally {
-          setLoading(false);
+          setLoading(false)
         }
-      };
+      }
 
-      void loadDevotionalHistory();
+      void loadDevotionalHistory()
     }, [])
-  );
+  )
 
   const handleOpenDevotional = (item: DevotionalHistory) => {
     router.push({
-      pathname: "/devotional-result",
+      pathname: '/devotional-result',
       params: {
         title: item.title,
         content: item.content,
         theme: item.theme,
-        fromHistory: "true",
+        fromHistory: 'true',
       },
-    });
-  };
+    })
+  }
 
   const handleViewAll = () => {
-    router.push("/history");
-  };
+    router.push('/history')
+  }
 
   const handleShareVerse = async () => {
     if (translatedVerse) {
-      await shareVerse(translatedVerse.text, translatedVerse.reference);
+      await shareVerse(translatedVerse.text, translatedVerse.reference)
     }
-  };
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -95,7 +95,7 @@ export default function HomeScreen() {
               color={colors.primary}
               style={{ marginRight: spacing.sm }}
             />
-            <ThemedText type="title">{t("common.appName")}</ThemedText>
+            <ThemedText type="title">{t('common.appName')}</ThemedText>
           </View>
           <Pressable
             onPress={toggleLanguage}
@@ -105,7 +105,7 @@ export default function HomeScreen() {
                 borderColor: colors.primary,
                 backgroundColor: pressed
                   ? `${colors.primary}15`
-                  : "transparent",
+                  : 'transparent',
                 transform: [{ scale: pressed ? 0.98 : 1 }],
               },
             ]}
@@ -113,7 +113,7 @@ export default function HomeScreen() {
             <ThemedText
               style={[styles.languageButtonText, { color: colors.primary }]}
             >
-              {isEnglish ? "🇺🇸 EN" : "🇧🇷 PT"}
+              {isEnglish ? '🇺🇸 EN' : '🇧🇷 PT'}
             </ThemedText>
           </Pressable>
         </View>
@@ -145,7 +145,7 @@ export default function HomeScreen() {
         <View style={[styles.recentSection, { marginBottom: spacing.xl }]}>
           <View style={[styles.sectionHeader, { marginBottom: spacing.sm }]}>
             <ThemedText type="subtitle">
-              {t("home.recentDevotionals")}
+              {t('home.recentDevotionals')}
             </ThemedText>
             <TouchableOpacity
               onPress={handleViewAll}
@@ -160,7 +160,7 @@ export default function HomeScreen() {
                       { color: colors.primary, marginRight: spacing.xs },
                     ]}
                   >
-                    {t("home.viewAll")}
+                    {t('home.viewAll')}
                   </ThemedText>
                   <IconSymbol
                     name="arrow.right"
@@ -176,7 +176,7 @@ export default function HomeScreen() {
             <ActivityIndicator size="large" color={colors.primary} />
           ) : devotionalHistory.length > 0 ? (
             <View style={styles.historyList}>
-              {devotionalHistory.map((item) => (
+              {devotionalHistory.map(item => (
                 <DevotionalListItem
                   key={item.id}
                   title={item.title}
@@ -188,7 +188,7 @@ export default function HomeScreen() {
             </View>
           ) : (
             <ThemedText variant="secondary" style={styles.noHistoryText}>
-              {t("home.noDevotionals")}
+              {t('home.noDevotionals')}
             </ThemedText>
           )}
         </View>
@@ -212,10 +212,10 @@ export default function HomeScreen() {
           />
           <View style={styles.infoContent}>
             <ThemedText variant="primary" style={styles.infoTitle}>
-              {t("home.howToUse")}
+              {t('home.howToUse')}
             </ThemedText>
             <ThemedText variant="secondary" style={styles.infoText}>
-              {t("home.howToUseDescription")}
+              {t('home.howToUseDescription')}
             </ThemedText>
           </View>
         </ThemedView>
@@ -230,12 +230,12 @@ export default function HomeScreen() {
             style={{ marginRight: spacing.sm }}
           />
           <ThemedText variant="tertiary" style={styles.disclaimerText}>
-            {t("home.disclaimer")}
+            {t('home.disclaimer')}
           </ThemedText>
         </View>
       </ScrollView>
     </SafeAreaView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -246,55 +246,55 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   headerLeft: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   languageButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
     borderWidth: 1.5,
     elevation: 0,
-    shadowColor: "transparent",
+    shadowColor: 'transparent',
   },
   languageButtonText: {
     fontSize: 14,
-    fontFamily: "Inter-SemiBold",
+    fontFamily: 'Inter-SemiBold',
   },
   loadingContainer: {
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     minHeight: 120,
   },
   recentSection: {
     flex: 1,
   },
   sectionHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   viewAllButton: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   viewAllText: {
     fontSize: 14,
-    fontFamily: "Inter-Medium",
+    fontFamily: 'Inter-Medium',
   },
   historyList: {
     flex: 1,
   },
   infoCard: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   infoContent: {
     flex: 1,
@@ -302,15 +302,15 @@ const styles = StyleSheet.create({
   infoTitle: {
     fontSize: 16,
     marginBottom: 8,
-    fontFamily: "Inter-SemiBold",
+    fontFamily: 'Inter-SemiBold',
   },
   infoText: {
     fontSize: 14,
     lineHeight: 20,
   },
   disclaimerContainer: {
-    flexDirection: "row",
-    alignItems: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'flex-start',
   },
   disclaimerText: {
     flex: 1,
@@ -319,6 +319,6 @@ const styles = StyleSheet.create({
   },
   noHistoryText: {
     fontSize: 14,
-    fontFamily: "Inter-Medium",
+    fontFamily: 'Inter-Medium',
   },
-});
+})

@@ -1,5 +1,4 @@
 import { fireEvent, render, waitFor } from '@testing-library/react-native'
-import React from 'react'
 import { Keyboard } from 'react-native'
 
 // Mock de useRouter
