@@ -109,6 +109,7 @@ export default function HistoryScreen() {
 
       <ScrollView
         contentContainerStyle={[styles.scrollContent, { padding: spacing.md }]}
+        showsVerticalScrollIndicator={false}
       >
         <View style={[styles.headerContainer, { marginBottom: spacing.md }]}>
           <View style={styles.titleContainer}>

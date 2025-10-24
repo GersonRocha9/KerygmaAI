@@ -86,6 +86,7 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.scrollContent}
         contentContainerStyle={{ padding: spacing.md }}
+        showsVerticalScrollIndicator={false}
       >
         <View style={[styles.header, { marginBottom: spacing.md }]}>
           <View style={styles.headerLeft}>

@@ -95,7 +95,11 @@ function RootLayoutNav() {
         >
           <I18nextProvider i18n={i18n}>
             <View style={styles.container}>
-              <Stack>
+              <Stack
+                screenOptions={{
+                  fullScreenGestureEnabled: true,
+                }}
+              >
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               </Stack>
               <StatusBar style="auto" />

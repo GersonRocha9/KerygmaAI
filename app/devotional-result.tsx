@@ -2,10 +2,7 @@ import { ThemedText } from '@/src/components/ThemedText'
 import { ThemedView } from '@/src/components/ThemedView'
 import { IconSymbol } from '@/src/components/ui/IconSymbol'
 import { Fonts } from '@/src/constants/Fonts'
-import {
-  extractDevotionalParts,
-  formatTitle,
-} from '@/src/formatters/textFormatters'
+import { extractDevotionalParts } from '@/src/formatters/textFormatters'
 import { useLanguage } from '@/src/hooks/useLanguage'
 import {
   useThemeBorderRadius,
@@ -40,7 +37,6 @@ export default function DevotionalResultScreen() {
   const { t } = useLanguage()
 
   // Processar o conteúdo para exibição
-  const processedTitle = formatTitle(title)
   const devotionalParts = extractDevotionalParts(content)
 
   // Função para compartilhar o devocional
@@ -49,11 +45,11 @@ export default function DevotionalResultScreen() {
       setIsSharing(true)
       try {
         const contentToShare = `${
-          processedTitle || t('devotionalResult.title')
+          title || t('devotionalResult.title')
         }\n\n${content}`
         await shareDevotional(
           contentToShare,
-          processedTitle || t('devotionalResult.title')
+          title || t('devotionalResult.title')
         )
       } catch (error) {
         console.error(t('devotionalResult.shareError'), error)
@@ -68,7 +64,7 @@ export default function DevotionalResultScreen() {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: t('devotionalResult.title'),
+          headerTitle: title || t('devotionalResult.title'),
           headerTintColor: colors.primary,
           headerTitleStyle: {
             color: colors.primary,
@@ -105,6 +101,7 @@ export default function DevotionalResultScreen() {
             styles.scrollContent,
             { padding: spacing.md },
           ]}
+          showsVerticalScrollIndicator={false}
         >
           <ThemedView
             variant="cardVariant"
@@ -117,7 +114,7 @@ export default function DevotionalResultScreen() {
             ]}
           >
             {/* Título do Devocional */}
-            {processedTitle && (
+            {title && (
               <View
                 style={[
                   styles.devotionalTitleContainer,
@@ -130,7 +127,7 @@ export default function DevotionalResultScreen() {
                 ]}
               >
                 <ThemedText variant="primary" style={styles.devotionalTitle}>
-                  {processedTitle}
+                  {title}
                 </ThemedText>
               </View>
             )}

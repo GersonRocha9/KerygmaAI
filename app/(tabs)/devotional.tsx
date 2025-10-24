@@ -67,6 +67,8 @@ export default function DevotionalScreen() {
       if (result?.title && result.content) {
         await saveDevotionalToHistory(result.title, result.content, data.theme)
 
+        console.log({ result })
+
         router.push({
           pathname: '/devotional-result',
           params: {
@@ -114,6 +116,8 @@ export default function DevotionalScreen() {
               styles.scrollContent,
               { padding: spacing.md },
             ]}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             <ThemedView
               variant="cardVariant"
