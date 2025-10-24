@@ -24,10 +24,13 @@
       "recommended": true,
       "suspicious": {
         "noExplicitAny": "warn"
+      },
+      "correctness": {
+        "noUnusedImports": "error"
       }
     }
   },
   "files": {
-    "ignore": ["node_modules", "dist", "build", "coverage"]
+    "ignore": ["node_modules", "dist", "build", "coverage", ".expo"]
   }
 }

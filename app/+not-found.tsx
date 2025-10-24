@@ -1,10 +1,9 @@
 import { Stack, useRouter } from 'expo-router'
 import { Platform, Pressable, StyleSheet, View } from 'react-native'
 
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import React from 'react'
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
 
 export default function NotFoundScreen() {
   const router = useRouter()

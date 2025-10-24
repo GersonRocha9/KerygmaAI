@@ -1,19 +1,19 @@
-import { CreateDevotionalButton } from '@/components/CreateDevotionalButton'
-import { DevotionalListItem } from '@/components/DevotionalListItem'
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { VerseCard } from '@/components/VerseCard'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import { useTranslatedVerseOfTheDay } from '@/hooks/queries/useVerseOfTheDay'
-import { useLanguage } from '@/hooks/useLanguage'
-import { useThemeColors, useThemeSpacing } from '@/hooks/useTheme'
+import { CreateDevotionalButton } from '@/src/components/CreateDevotionalButton'
+import { DevotionalListItem } from '@/src/components/DevotionalListItem'
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { VerseCard } from '@/src/components/VerseCard'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
+import { useTranslatedVerseOfTheDay } from '@/src/hooks/queries/useVerseOfTheDay'
+import { useLanguage } from '@/src/hooks/useLanguage'
+import { useThemeColors, useThemeSpacing } from '@/src/hooks/useTheme'
 import {
   type DevotionalHistory,
   loadRecentDevotionals,
-} from '@/services/devotionalService'
-import { shareVerse } from '@/services/shareService'
+} from '@/src/services/devotionalService'
+import { shareVerse } from '@/src/services/shareService'
 import { useFocusEffect, useRouter } from 'expo-router'
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import {
   ActivityIndicator,
   Pressable,
@@ -86,6 +86,7 @@ export default function HomeScreen() {
       <ScrollView
         style={styles.scrollContent}
         contentContainerStyle={{ padding: spacing.md }}
+        showsVerticalScrollIndicator={false}
       >
         <View style={[styles.header, { marginBottom: spacing.md }]}>
           <View style={styles.headerLeft}>

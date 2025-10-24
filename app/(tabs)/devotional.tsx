@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import {
   ActivityIndicator,
@@ -16,17 +16,17 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import * as z from 'zod'
 
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import { useLanguage } from '@/hooks/useLanguage'
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
+import { useLanguage } from '@/src/hooks/useLanguage'
 import {
   useThemeBorderRadius,
   useThemeColors,
   useThemeSpacing,
-} from '@/hooks/useTheme'
-import { generateDevotional } from '@/services/aiService'
-import { saveDevotionalToHistory } from '@/services/devotionalService'
+} from '@/src/hooks/useTheme'
+import { generateDevotional } from '@/src/services/aiService'
+import { saveDevotionalToHistory } from '@/src/services/devotionalService'
 
 // Definindo o schema de validação com zod
 const formSchema = z.object({
@@ -62,20 +62,12 @@ export default function DevotionalScreen() {
       setLoading(true)
       setError('')
 
-      console.log('Submitting form with theme:', data.theme.trim())
-      console.log('Current language is English:', isEnglish)
-      console.log('Current language code:', currentLanguage)
-
       const result = await generateDevotional(data.theme.trim(), isEnglish)
-      console.log(
-        'Received result from API:',
-        result
-          ? `title: ${result.title}, content length: ${result.content?.length}`
-          : 'no result'
-      )
 
       if (result?.title && result.content) {
         await saveDevotionalToHistory(result.title, result.content, data.theme)
+
+        console.log({ result })
 
         router.push({
           pathname: '/devotional-result',
@@ -124,6 +116,8 @@ export default function DevotionalScreen() {
               styles.scrollContent,
               { padding: spacing.md },
             ]}
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
           >
             <ThemedView
               variant="cardVariant"

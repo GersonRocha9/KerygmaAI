@@ -1,20 +1,17 @@
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import { Fonts } from '@/constants/Fonts'
-import {
-  extractDevotionalParts,
-  formatTitle,
-} from '@/formatters/textFormatters'
-import { useLanguage } from '@/hooks/useLanguage'
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
+import { Fonts } from '@/src/constants/Fonts'
+import { extractDevotionalParts } from '@/src/formatters/textFormatters'
+import { useLanguage } from '@/src/hooks/useLanguage'
 import {
   useThemeBorderRadius,
   useThemeColors,
   useThemeSpacing,
-} from '@/hooks/useTheme'
-import { shareDevotional } from '@/services/shareService'
+} from '@/src/hooks/useTheme'
+import { shareDevotional } from '@/src/services/shareService'
 import { Stack, useLocalSearchParams } from 'expo-router'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   ActivityIndicator,
   ScrollView,
@@ -40,7 +37,6 @@ export default function DevotionalResultScreen() {
   const { t } = useLanguage()
 
   // Processar o conteúdo para exibição
-  const processedTitle = formatTitle(title)
   const devotionalParts = extractDevotionalParts(content)
 
   // Função para compartilhar o devocional
@@ -48,10 +44,12 @@ export default function DevotionalResultScreen() {
     if (content) {
       setIsSharing(true)
       try {
-        const contentToShare = `${processedTitle || t('devotionalResult.title')}\n\n${content}`
+        const contentToShare = `${
+          title || t('devotionalResult.title')
+        }\n\n${content}`
         await shareDevotional(
           contentToShare,
-          processedTitle || t('devotionalResult.title')
+          title || t('devotionalResult.title')
         )
       } catch (error) {
         console.error(t('devotionalResult.shareError'), error)
@@ -66,7 +64,7 @@ export default function DevotionalResultScreen() {
       <Stack.Screen
         options={{
           headerShown: true,
-          headerTitle: t('devotionalResult.title'),
+          headerTitle: title || t('devotionalResult.title'),
           headerTintColor: colors.primary,
           headerTitleStyle: {
             color: colors.primary,
@@ -103,6 +101,7 @@ export default function DevotionalResultScreen() {
             styles.scrollContent,
             { padding: spacing.md },
           ]}
+          showsVerticalScrollIndicator={false}
         >
           <ThemedView
             variant="cardVariant"
@@ -115,7 +114,7 @@ export default function DevotionalResultScreen() {
             ]}
           >
             {/* Título do Devocional */}
-            {processedTitle && (
+            {title && (
               <View
                 style={[
                   styles.devotionalTitleContainer,
@@ -128,7 +127,7 @@ export default function DevotionalResultScreen() {
                 ]}
               >
                 <ThemedText variant="primary" style={styles.devotionalTitle}>
-                  {processedTitle}
+                  {title}
                 </ThemedText>
               </View>
             )}

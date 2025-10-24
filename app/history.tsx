@@ -1,20 +1,20 @@
-import { DevotionalListItem } from '@/components/DevotionalListItem'
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import { useLanguage } from '@/hooks/useLanguage'
+import { DevotionalListItem } from '@/src/components/DevotionalListItem'
+import { ThemedText } from '@/src/components/ThemedText'
+import { ThemedView } from '@/src/components/ThemedView'
+import { IconSymbol } from '@/src/components/ui/IconSymbol'
+import { useLanguage } from '@/src/hooks/useLanguage'
 import {
   useThemeBorderRadius,
   useThemeColors,
   useThemeSpacing,
-} from '@/hooks/useTheme'
+} from '@/src/hooks/useTheme'
 import {
   type DevotionalHistory,
   clearDevotionalHistory,
   loadDevotionalHistory,
-} from '@/services/devotionalService'
+} from '@/src/services/devotionalService'
 import { Stack, useRouter } from 'expo-router'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
   Alert,
@@ -109,6 +109,7 @@ export default function HistoryScreen() {
 
       <ScrollView
         contentContainerStyle={[styles.scrollContent, { padding: spacing.md }]}
+        showsVerticalScrollIndicator={false}
       >
         <View style={[styles.headerContainer, { marginBottom: spacing.md }]}>
           <View style={styles.titleContainer}>
