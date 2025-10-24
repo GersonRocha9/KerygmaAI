@@ -1,10 +1,10 @@
-import versiculosPT from "@/i18n/versiculos-pt.json";
-import versiculosEN from "@/i18n/versiculos.json";
 import {
   useTranslatedVerseOfTheDay,
   useVerseOfTheDay,
 } from "@/src/hooks/queries/useVerseOfTheDay";
 import * as Language from "@/src/hooks/useLanguage";
+import versiculosPT from "@/src/i18n/versiculos-pt.json";
+import versiculosEN from "@/src/i18n/versiculos.json";
 import { renderHook } from "@testing-library/react-native";
 
 // Mock do módulo de linguagem
@@ -46,7 +46,10 @@ describe("useVerseOfTheDay", () => {
 
     // Verificar se o versículo está na lista de versículos em inglês
     const verseText = result.current.data?.[0];
-    const verseIndex = versiculosEN.findIndex((v) => v.verse === verseText);
+    const verseIndex = versiculosEN.findIndex(
+      (v: { verse: string; reference: string; id: string }) =>
+        v.verse === verseText
+    );
     expect(verseIndex).not.toBe(-1);
   });
 
@@ -66,7 +69,10 @@ describe("useVerseOfTheDay", () => {
 
     // Verificar se o versículo está na lista de versículos em português
     const verseText = result.current.data?.[0];
-    const verseIndex = versiculosPT.findIndex((v) => v.verse === verseText);
+    const verseIndex = versiculosPT.findIndex(
+      (v: { verse: string; reference: string; id: string }) =>
+        v.verse === verseText
+    );
     expect(verseIndex).not.toBe(-1);
   });
 

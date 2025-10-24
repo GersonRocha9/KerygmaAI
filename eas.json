@@ -1,15 +1,12 @@
 {
   "cli": {
-    "version": ">= 15.0.13",
+    "version": ">= 16.24.1",
     "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
-    },
-    "ios-simulator": {
-      "extends": "development",
+      "distribution": "internal",
       "ios": {
         "simulator": true
       }
@@ -22,11 +19,6 @@
     }
   },
   "submit": {
-    "production": {
-      "android": {
-        "serviceAccountKeyPath": "./ServiceAccountKerygmaAI.json",
-        "track": "internal"
-      }
-    }
+    "production": {}
   }
 }
