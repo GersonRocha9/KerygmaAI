@@ -1,6 +1,12 @@
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { Tabs } from 'expo-router'
-import React, { useEffect, useCallback, useMemo, useRef, useState } from 'react'
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { Tabs } from "expo-router";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   Animated,
   Dimensions,
@@ -8,24 +14,24 @@ import {
   StyleSheet,
   View,
   useColorScheme,
-} from 'react-native'
+} from "react-native";
 
-import { HapticTab } from '@/components/HapticTab'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import TabBarBackground from '@/components/ui/TabBarBackground'
-import { Colors } from '@/constants/Colors'
-import { useLanguage } from '@/hooks/useLanguage'
+import { HapticTab } from "@/src/components/HapticTab";
+import { IconSymbol } from "@/src/components/ui/IconSymbol";
+import TabBarBackground from "@/src/components/ui/TabBarBackground";
+import { Colors } from "@/src/constants/Colors";
+import { useLanguage } from "@/src/hooks/useLanguage";
 
 export default function TabLayout() {
-  const { width } = Dimensions.get('window')
-  const isSmallDevice = width < 375
-  const colorScheme = useColorScheme()
-  const theme = Colors[colorScheme ?? 'light']
-  const { t } = useLanguage()
+  const { width } = Dimensions.get("window");
+  const isSmallDevice = width < 375;
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? "light"];
+  const { t } = useLanguage();
 
-  const animatedValue = useRef(new Animated.Value(0)).current
-  const [tabWidth, setTabWidth] = useState(width / 2)
-  const [activeTabIndex, setActiveTabIndex] = useState(0)
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const [tabWidth, setTabWidth] = useState(width / 2);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
   const animateIndicator = useCallback(
     (index: number) => {
@@ -34,36 +40,36 @@ export default function TabLayout() {
         tension: 180,
         friction: 25,
         useNativeDriver: true,
-      }).start()
+      }).start();
     },
     [animatedValue, tabWidth]
-  )
+  );
 
   const handleTabPress = useCallback(
     (index: number) => {
-      setActiveTabIndex(index)
-      animateIndicator(index)
+      setActiveTabIndex(index);
+      animateIndicator(index);
     },
     [animateIndicator]
-  )
+  );
 
   useEffect(() => {
-    animateIndicator(activeTabIndex)
-  }, [activeTabIndex, animateIndicator])
+    animateIndicator(activeTabIndex);
+  }, [activeTabIndex, animateIndicator]);
 
   const renderTabBar = useMemo(() => {
     return (props: BottomTabBarProps) => {
-      const routesCount = props.state.routes.length
+      const routesCount = props.state.routes.length;
       if (routesCount > 0 && width / routesCount !== tabWidth) {
         setTimeout(() => {
-          setTabWidth(width / routesCount)
-        }, 0)
+          setTabWidth(width / routesCount);
+        }, 0);
       }
 
       if (props.state.index !== activeTabIndex) {
         setTimeout(() => {
-          setActiveTabIndex(props.state.index)
-        }, 0)
+          setActiveTabIndex(props.state.index);
+        }, 0);
       }
 
       return (
@@ -89,11 +95,11 @@ export default function TabLayout() {
           <View style={styles.tabBar}>
             {props.state.routes.map(
               (route: { key: string; name: string }, index: number) => {
-                const isFocused = props.state.index === index
+                const isFocused = props.state.index === index;
                 const onPress = () => {
-                  handleTabPress(index)
-                  props.navigation.navigate(route.name)
-                }
+                  handleTabPress(index);
+                  props.navigation.navigate(route.name);
+                };
 
                 return (
                   <HapticTab
@@ -120,21 +126,21 @@ export default function TabLayout() {
                         },
                       ]}
                     >
-                      {route.name === 'index'
-                        ? t('tabs.home')
-                        : route.name === 'devotional'
-                          ? t('tabs.devotional')
-                          : route.name.charAt(0).toUpperCase() +
-                            route.name.slice(1)}
+                      {route.name === "index"
+                        ? t("tabs.home")
+                        : route.name === "devotional"
+                        ? t("tabs.devotional")
+                        : route.name.charAt(0).toUpperCase() +
+                          route.name.slice(1)}
                     </Animated.Text>
                   </HapticTab>
-                )
+                );
               }
             )}
           </View>
         </View>
-      )
-    }
+      );
+    };
   }, [
     animatedValue,
     handleTabPress,
@@ -144,7 +150,7 @@ export default function TabLayout() {
     theme,
     t,
     isSmallDevice,
-  ])
+  ]);
 
   return (
     <Tabs
@@ -156,7 +162,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: t('tabs.home'),
+          title: t("tabs.home"),
           tabBarIcon: ({ color, size }) => (
             <IconSymbol
               size={isSmallDevice ? 24 : 26}
@@ -170,7 +176,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="devotional"
         options={{
-          title: t('tabs.devotional'),
+          title: t("tabs.devotional"),
           tabBarIcon: ({ color, size }) => (
             <IconSymbol
               size={isSmallDevice ? 24 : 26}
@@ -182,7 +188,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -190,32 +196,32 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   tabBarContainer: {
-    height: Platform.OS === 'ios' ? 88 : 64,
-    paddingBottom: Platform.OS === 'ios' ? 24 : 0,
-    position: 'relative',
+    height: Platform.OS === "ios" ? 88 : 64,
+    paddingBottom: Platform.OS === "ios" ? 24 : 0,
+    position: "relative",
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.05)',
+    borderTopColor: "rgba(0,0,0,0.05)",
   },
   tabBar: {
-    flexDirection: 'row',
-    height: '100%',
+    flexDirection: "row",
+    height: "100%",
   },
   tab: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   tabText: {
     fontSize: 11,
-    fontWeight: '500',
+    fontWeight: "500",
     marginTop: 2,
   },
   tabIndicator: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     height: 3,
     zIndex: 1,
     borderBottomLeftRadius: 4,
     borderBottomRightRadius: 4,
   },
-})
+});

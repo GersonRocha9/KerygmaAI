@@ -1,29 +1,29 @@
-import { Stack, useRouter } from 'expo-router'
-import { Platform, Pressable, StyleSheet, View } from 'react-native'
+import { Stack, useRouter } from "expo-router";
+import { Platform, Pressable, StyleSheet, View } from "react-native";
 
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import React from 'react'
+import { ThemedText } from "@/src/components/ThemedText";
+import { ThemedView } from "@/src/components/ThemedView";
+import { IconSymbol } from "@/src/components/ui/IconSymbol";
+import React from "react";
 
 export default function NotFoundScreen() {
-  const router = useRouter()
+  const router = useRouter();
 
   const goToHome = () => {
-    router.replace('/')
-  }
+    router.replace("/");
+  };
 
   return (
     <>
       <Stack.Screen
         options={{
-          title: 'Página não encontrada',
-          headerTintColor: '#4CAF50',
+          title: "Página não encontrada",
+          headerTintColor: "#4CAF50",
           headerTitleStyle: {
-            color: '#4CAF50',
-            fontWeight: 'bold',
+            color: "#4CAF50",
+            fontWeight: "bold",
           },
-          headerBackTitle: 'Voltar',
+          headerBackTitle: "Voltar",
         }}
       />
       <ThemedView style={styles.container}>
@@ -57,16 +57,16 @@ export default function NotFoundScreen() {
         </ThemedText>
       </ThemedView>
     </>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     padding: 20,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: "#F9F9F9",
     ...Platform.select({
       android: {
         paddingTop: 8,
@@ -75,38 +75,38 @@ const styles = StyleSheet.create({
     }),
   },
   iconContainer: {
-    position: 'relative',
+    position: "relative",
     width: 120,
     height: 120,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: 24,
   },
   title: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#333333',
+    fontWeight: "bold",
+    color: "#333333",
     marginBottom: 12,
-    textAlign: 'center',
+    textAlign: "center",
   },
   message: {
     fontSize: 16,
-    color: '#616161',
+    color: "#616161",
     marginBottom: 32,
-    textAlign: 'center',
-    maxWidth: '80%',
+    textAlign: "center",
+    maxWidth: "80%",
   },
   button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#4CAF50',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4CAF50",
     borderRadius: 8,
     paddingVertical: 12,
     paddingHorizontal: 24,
     marginTop: 8,
     elevation: 2,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -115,15 +115,15 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: "600",
   },
   disclaimer: {
     fontSize: 14,
-    color: '#9E9E9E',
+    color: "#9E9E9E",
     marginTop: 48,
-    textAlign: 'center',
-    maxWidth: '80%',
+    textAlign: "center",
+    maxWidth: "80%",
   },
-})
+});

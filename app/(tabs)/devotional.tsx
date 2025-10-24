@@ -1,7 +1,7 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useRouter } from 'expo-router'
-import React, { useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
   Keyboard,
@@ -12,38 +12,38 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
-} from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import * as z from 'zod'
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import * as z from "zod";
 
-import { ThemedText } from '@/components/ThemedText'
-import { ThemedView } from '@/components/ThemedView'
-import { IconSymbol } from '@/components/ui/IconSymbol'
-import { useLanguage } from '@/hooks/useLanguage'
+import { ThemedText } from "@/src/components/ThemedText";
+import { ThemedView } from "@/src/components/ThemedView";
+import { IconSymbol } from "@/src/components/ui/IconSymbol";
+import { useLanguage } from "@/src/hooks/useLanguage";
 import {
   useThemeBorderRadius,
   useThemeColors,
   useThemeSpacing,
-} from '@/hooks/useTheme'
-import { generateDevotional } from '@/services/aiService'
-import { saveDevotionalToHistory } from '@/services/devotionalService'
+} from "@/src/hooks/useTheme";
+import { generateDevotional } from "@/src/services/aiService";
+import { saveDevotionalToHistory } from "@/src/services/devotionalService";
 
 // Definindo o schema de validação com zod
 const formSchema = z.object({
-  theme: z.string().min(1, 'Por favor, digite um tema para o devocional'),
-})
+  theme: z.string().min(1, "Por favor, digite um tema para o devocional"),
+});
 
 // Tipo derivado do schema para TypeScript
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>;
 
 export default function DevotionalScreen() {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const router = useRouter()
-  const colors = useThemeColors()
-  const spacing = useThemeSpacing()
-  const borderRadius = useThemeBorderRadius()
-  const { t, isEnglish, currentLanguage } = useLanguage()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+  const colors = useThemeColors();
+  const spacing = useThemeSpacing();
+  const borderRadius = useThemeBorderRadius();
+  const { t, isEnglish, currentLanguage } = useLanguage();
 
   const {
     control,
@@ -53,57 +53,57 @@ export default function DevotionalScreen() {
   } = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      theme: '',
+      theme: "",
     },
-  })
+  });
 
   const onSubmit = async (data: FormData) => {
     try {
-      setLoading(true)
-      setError('')
+      setLoading(true);
+      setError("");
 
-      console.log('Submitting form with theme:', data.theme.trim())
-      console.log('Current language is English:', isEnglish)
-      console.log('Current language code:', currentLanguage)
+      console.log("Submitting form with theme:", data.theme.trim());
+      console.log("Current language is English:", isEnglish);
+      console.log("Current language code:", currentLanguage);
 
-      const result = await generateDevotional(data.theme.trim(), isEnglish)
+      const result = await generateDevotional(data.theme.trim(), isEnglish);
       console.log(
-        'Received result from API:',
+        "Received result from API:",
         result
           ? `title: ${result.title}, content length: ${result.content?.length}`
-          : 'no result'
-      )
+          : "no result"
+      );
 
       if (result?.title && result.content) {
-        await saveDevotionalToHistory(result.title, result.content, data.theme)
+        await saveDevotionalToHistory(result.title, result.content, data.theme);
 
         router.push({
-          pathname: '/devotional-result',
+          pathname: "/devotional-result",
           params: {
             content: result.content,
             title: result.title,
             theme: data.theme,
-            fromHistory: 'true',
+            fromHistory: "true",
           },
-        })
+        });
 
-        reset()
+        reset();
       } else {
-        throw new Error(t('devotional.noContentError'))
+        throw new Error(t("devotional.noContentError"));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('devotional.apiError'))
-      console.error('Erro ao gerar devocional:', err)
+      setError(err instanceof Error ? err.message : t("devotional.apiError"));
+      console.error("Erro ao gerar devocional:", err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.container}
         >
           <View style={[styles.header, { borderBottomColor: colors.border }]}>
@@ -114,7 +114,7 @@ export default function DevotionalScreen() {
               style={{ marginRight: spacing.sm }}
             />
             <ThemedText variant="primary" type="subtitle">
-              {t('common.appName')}
+              {t("common.appName")}
             </ThemedText>
           </View>
 
@@ -136,7 +136,7 @@ export default function DevotionalScreen() {
               ]}
             >
               <ThemedText variant="primary" style={styles.label}>
-                {t('devotional.questionPrompt')}
+                {t("devotional.questionPrompt")}
               </ThemedText>
 
               <Controller
@@ -155,7 +155,7 @@ export default function DevotionalScreen() {
                         color: colors.textPrimary,
                       },
                     ]}
-                    placeholder={t('devotional.themePlaceholder')}
+                    placeholder={t("devotional.themePlaceholder")}
                     placeholderTextColor={colors.textTertiary}
                     value={value}
                     onChangeText={onChange}
@@ -171,7 +171,7 @@ export default function DevotionalScreen() {
                 <ThemedText
                   style={[styles.errorMessage, { color: colors.error }]}
                 >
-                  {t('devotional.themeError')}
+                  {t("devotional.themeError")}
                 </ThemedText>
               )}
 
@@ -196,7 +196,7 @@ export default function DevotionalScreen() {
                       <ActivityIndicator color={colors.primary} size="small" />
                     ) : (
                       <ThemedText style={[styles.buttonText]}>
-                        {t('devotional.generateButton')}
+                        {t("devotional.generateButton")}
                       </ThemedText>
                     )}
                   </ThemedView>
@@ -223,7 +223,7 @@ export default function DevotionalScreen() {
                   style={{ marginRight: spacing.sm }}
                 />
                 <ThemedText variant="secondary" style={styles.disclaimerText}>
-                  {t('devotional.disclaimer')}
+                  {t("devotional.disclaimer")}
                 </ThemedText>
               </View>
 
@@ -257,14 +257,14 @@ export default function DevotionalScreen() {
                 style={{ marginRight: spacing.sm }}
               />
               <ThemedText variant="secondary" style={styles.infoText}>
-                {t('devotional.howToUseDescription')}
+                {t("devotional.howToUseDescription")}
               </ThemedText>
             </ThemedView>
           </ScrollView>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -272,8 +272,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 16,
     borderBottomWidth: 1,
   },
@@ -289,56 +289,56 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 8,
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: "Inter-SemiBold",
   },
   input: {
     borderWidth: 1,
     padding: 12,
     fontSize: 16,
     minHeight: 100,
-    textAlignVertical: 'top',
-    fontFamily: 'Inter-Regular',
+    textAlignVertical: "top",
+    fontFamily: "Inter-Regular",
   },
   errorMessage: {
     fontSize: 12,
     marginTop: 4,
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
   },
   buttonContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   button: {
     minWidth: 200,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    fontFamily: 'Inter-SemiBold',
+    fontFamily: "Inter-SemiBold",
     fontSize: 16,
-    color: '#FFF',
+    color: "#FFF",
   },
   errorText: {
-    textAlign: 'center',
-    fontFamily: 'Inter-Regular',
+    textAlign: "center",
+    fontFamily: "Inter-Regular",
   },
   disclaimerContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     borderLeftWidth: 2,
   },
   disclaimerText: {
     flex: 1,
     fontSize: 13,
     lineHeight: 18,
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
   },
   infoContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
   },
   infoText: {
     flex: 1,
     fontSize: 14,
     lineHeight: 20,
-    fontFamily: 'Inter-Regular',
+    fontFamily: "Inter-Regular",
   },
-})
+});
