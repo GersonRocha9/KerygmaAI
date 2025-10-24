@@ -6,11 +6,11 @@ A mobile application that uses artificial intelligence to generate personalized 
 
 <div align="center">
 <a href="https://apps.apple.com/br/app/kerygmaai/id6742852987?l=en-GB">
-  <img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" alt="Download on the App Store" height="70">
+  <img src="https://developer.apple.com/app-store/marketing/guidelines/images/badge-download-on-the-app-store.svg" alt="Download on the App Store" height="60">
 </a>
 
 <a href="https://play.google.com/store/apps/details?id=YOUR_PACKAGE_NAME">
-  <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="95">
+  <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="60">
 </a>
 </div>
 
@@ -69,22 +69,26 @@ Generated devotionals are automatically saved in the user's history for later re
 ## 🛠️ Installation and Usage
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/GersonRocha9/kerygma-ai.git
 cd kerygma-ai
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Create a `.env` file with the necessary environment variables:
+
 ```
 EXPO_PUBLIC_OPENAI_API_KEY=your_api_key_here
 ```
 
 4. Run the project:
+
 ```bash
 npx expo start
 ```
