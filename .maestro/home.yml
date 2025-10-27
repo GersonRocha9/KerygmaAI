@@ -1,0 +1,4 @@
+appId: com.gersonrocha9.KerygmaAI
+---
+- launchApp
+- assertVisible: 'KerygmaAI'

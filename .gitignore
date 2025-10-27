@@ -45,3 +45,5 @@ android
 coverage
 
 .vscode/
+
+src/sql

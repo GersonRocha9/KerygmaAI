@@ -31,6 +31,15 @@
     }
   },
   "files": {
-    "ignore": ["node_modules", "dist", "build", "coverage", ".expo"]
+    "ignore": [
+      "node_modules",
+      "dist",
+      "build",
+      "coverage",
+      ".expo",
+      "ios",
+      "android",
+      "*.d.ts"
+    ]
   }
 }
